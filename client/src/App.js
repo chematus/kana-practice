@@ -1,0 +1,73 @@
+import React, { Suspense } from 'react';
+import {
+  unstable_createMuiStrictModeTheme as createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import logo from './assets/logo.svg';
+import { CircularProgress } from '@material-ui/core';
+import './styles/App.scss';
+
+const Canvas = React.lazy(() => import('./components/canvas/Canvas'));
+const Matcher = React.lazy(() => import('./components/matcher/Matcher'));
+const Picker = React.lazy(() => import('./components/picker/Picker'));
+const HowTo = React.lazy(() => import('./components/HowTo'));
+const Home = React.lazy(() => import('./components/Home'));
+const ErrorPage = React.lazy(() => import('./components/ErrorPage'));
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.theme = createMuiTheme({
+      palette: {
+        primary: {
+          main: '#555',
+        },
+        secondary: {
+          main: '#999',
+        },
+      },
+    });
+  }
+
+  render() {
+    return (
+      <ThemeProvider theme={this.theme}>
+        <Router>
+          <Header logo={logo} />
+          <main>
+            <Suspense
+              fallback={<CircularProgress className="circular-loader" />}
+            >
+              <Switch>
+                <Route path="/canvas">
+                  <Canvas />
+                </Route>
+                <Route path="/pick">
+                  <Picker />
+                </Route>
+                <Route path="/match">
+                  <Matcher />
+                </Route>
+                <Route path="/howto">
+                  <HowTo />
+                </Route>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route>
+                  <ErrorPage message="Page not found" />
+                </Route>
+              </Switch>
+            </Suspense>
+          </main>
+          <Footer />
+        </Router>
+      </ThemeProvider>
+    );
+  }
+}
+
+export default App;

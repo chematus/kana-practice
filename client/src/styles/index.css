@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Antic+Slab&display=swap');
+
+:root {
+  font-family: 'Antic Slab', serif;
+  font-size: 10px;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
