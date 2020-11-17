@@ -1,9 +1,9 @@
 import React from 'react';
 import { Fade, Slider } from '@material-ui/core';
 
-export default (props) => {
+export default ({ active, onChange }) => {
   return (
-    <Fade in={props.active}>
+    <Fade in={active}>
       <div id="size-range-container">
         <Slider
           min={5}
@@ -12,7 +12,7 @@ export default (props) => {
           orientation="vertical"
           defaultValue={5}
           valueLabelDisplay="off"
-          onChangeCommitted={props.onChange}
+          onChangeCommitted={onChange}
         />
       </div>
     </Fade>

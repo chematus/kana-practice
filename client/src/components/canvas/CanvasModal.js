@@ -8,19 +8,19 @@ import {
   CardContent,
 } from '@material-ui/core';
 
-export default (props) => {
+export default ({ active, toggleModal, img }) => {
   return (
     <Modal
-      open={props.active}
-      onBackdropClick={props.toggleModal}
-      onEscapeKeyDown={props.toggleModal}
+      open={active}
+      onBackdropClick={toggleModal}
+      onEscapeKeyDown={toggleModal}
     >
-      <Fade in={props.active}>
+      <Fade in={active}>
         <div className="modal">
           <Card>
-            <CardActionArea onClick={props.toggleModal}>
+            <CardActionArea onClick={toggleModal}>
               <CardContent>
-                <CardMedia image={props.img} className="modal-media" />
+                <CardMedia image={img} className="modal-media" />
               </CardContent>
             </CardActionArea>
           </Card>

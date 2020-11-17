@@ -1,8 +1,12 @@
 import React from 'react';
 import { Fade, Tooltip } from '@material-ui/core';
 
-class PerformanceDisplay extends React.Component {
-  getGrade = (p) => {
+const getPerformance = (correct, total) => {
+  return Math.round((correct / total) * 100);
+};
+
+export default ({ correct, total }) => {
+  const getGrade = (p) => {
     switch (true) {
       case p < 40:
         return 'Bad';
@@ -17,32 +21,23 @@ class PerformanceDisplay extends React.Component {
     }
   };
 
-  getPerformance = (correct, total) => {
-    return Math.round((correct / total) * 100);
-  };
-
-  render() {
-    const { correct, total } = this.props;
-    if (total < 5) {
-      return false;
-    }
-    const performance = this.getPerformance(correct, total);
-
-    return (
+  return (
+    total > 5 && (
       <Tooltip
-        title={`${correct} of ${total} correct (${performance}%)`}
+        title={`${correct} of ${total} correct (${getPerformance(
+          correct,
+          total,
+        )}%)`}
         TransitionComponent={Fade}
         placement="top"
         arrow
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          {this.getGrade(performance) || ''}
+          {getGrade(getPerformance(correct, total)) || ''}
           <sup>*</sup>
         </span>
       </Tooltip>
-    );
-  }
-}
-
-export default PerformanceDisplay;
+    )
+  );
+};

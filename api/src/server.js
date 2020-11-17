@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import config from './store/config';
 import applyPassportStrategy from './store/passport';
-import userController from './controllers/user.controller';
+import userController from './controllers/userController';
 
 const app = express();
 

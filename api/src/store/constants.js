@@ -1,3 +1,5 @@
+export const NAME_EMPTY = 'Username is empty';
+export const NAME_LENGTH = 'Username should be from 4 to 10 characters long';
 export const EMAIL_EMPTY = 'Email is empty';
 export const EMAIL_WRONG = 'Email in in wrong format';
 export const PASSWORD_EMPTY = 'Password is empty';

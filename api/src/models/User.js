@@ -15,16 +15,18 @@ const UserSchema = mongoose.Schema(
       index: true,
     },
     hashedPassword: String,
-    picker: {
-      correct: { type: Number, default: 0 },
-      total: { type: Number, default: 0 },
-    },
-    matcher: {
-      correct: { type: Number, default: 0 },
-      total: { type: Number, default: 0 },
-    },
-    canvas: {
-      total: { type: Number, default: 0 },
+    stats: {
+      picker: {
+        correct: { type: Number, default: 0 },
+        total: { type: Number, default: 0 },
+      },
+      matcher: {
+        correct: { type: Number, default: 0 },
+        total: { type: Number, default: 0 },
+      },
+      canvas: {
+        total: { type: Number, default: 0 },
+      },
     },
   },
   { timestamps: true },

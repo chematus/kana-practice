@@ -2,15 +2,15 @@ import React from 'react';
 import { Fade } from '@material-ui/core';
 import { CirclePicker } from 'react-color';
 
-export default (props) => {
+export default ({ active, onChange }) => {
   return (
-    <Fade in={props.active}>
+    <Fade in={active}>
       <div id="color-picker-container">
         <CirclePicker
           width="auto"
           circleSize={20}
           circleSpacing={5}
-          onChange={props.onChange}
+          onChange={onChange}
           colors={[
             '#f44336',
             '#e91e63',

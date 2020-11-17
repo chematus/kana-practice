@@ -5,18 +5,26 @@ import kana from './../_kana';
 class CanvasOCR {
   async parseImg(img) {
     if (this.worker.recognize) {
-      const {
-        data: { text },
-      } = await this.worker.recognize(img);
-      return text;
+      const data = await this.worker.recognize(img);
+      if (process.env.NODE_ENV) {
+        console.log(data);
+      }
+      return data.data.text;
     }
     return false;
   }
 
   async prepareWorker() {
+    let logger = null;
+    if (this.worker && this.worker.id) {
+      return true;
+    }
+    if (process.env.NODE_ENV === 'development') {
+      logger = (m) => console.log(m);
+    }
     this.worker = createWorker({
       langPath: path.join(__dirname, 'lang_data'),
-      logger: (m) => console.log(m),
+      logger,
     });
     await this.worker.load();
     await this.worker.loadLanguage('jpn');
@@ -25,7 +33,7 @@ class CanvasOCR {
       tessedit_char_whitelist: kana.ocr_whitelist,
       tessedit_pageseg_mode: PSM.SINGLE_CHAR,
     });
-    return this.worker;
+    return true;
   }
 
   async terminateWorker() {

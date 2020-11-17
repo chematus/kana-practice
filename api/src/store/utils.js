@@ -6,6 +6,8 @@ import {
   PASSWORD_LENGTH,
   EMAIL_EMPTY,
   EMAIL_WRONG,
+  NAME_EMPTY,
+  NAME_LENGTH,
 } from './constants';
 
 export const generatePassword = async (pwd) => {
@@ -13,6 +15,11 @@ export const generatePassword = async (pwd) => {
 };
 
 export const signUpValidation = [
+  check('username')
+    .exists()
+    .withMessage(NAME_EMPTY)
+    .isLength({ min: 4, max: 10 })
+    .withMessage(NAME_LENGTH),
   check('email')
     .exists()
     .withMessage(EMAIL_EMPTY)

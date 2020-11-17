@@ -10,7 +10,18 @@ import {
 import ColorPicker from './ColorPicker';
 import SizeRange from './SizeRange';
 
-export default (props) => {
+export default ({
+  isCanvasActive,
+  undo,
+  clear,
+  togglePicker,
+  toggleRange,
+  isRangeActive,
+  color,
+  onColorChange,
+  isPickerActive,
+  onSizeChange,
+}) => {
   return (
     <div id="controls">
       <Tooltip
@@ -21,7 +32,7 @@ export default (props) => {
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!props.isCanvasActive} onClick={props.undo}>
+          <IconButton disabled={!isCanvasActive} onClick={undo}>
             <UndoRounded fontSize="large" className="canvas-control" />
           </IconButton>
         </span>
@@ -34,7 +45,7 @@ export default (props) => {
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!props.isCanvasActive} onClick={props.clear}>
+          <IconButton disabled={!isCanvasActive} onClick={clear}>
             <DeleteRounded fontSize="large" className="canvas-control" />
           </IconButton>
         </span>
@@ -47,15 +58,9 @@ export default (props) => {
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton
-            disabled={!props.isCanvasActive}
-            onClick={props.toggleRange}
-          >
+          <IconButton disabled={!isCanvasActive} onClick={toggleRange}>
             <BrushRounded fontSize="large" className="canvas-control" />
-            <SizeRange
-              onChange={props.onSizeChange}
-              active={props.isRangeActive}
-            />
+            <SizeRange onChange={onSizeChange} active={isRangeActive} />
           </IconButton>
         </span>
       </Tooltip>
@@ -68,18 +73,15 @@ export default (props) => {
       >
         <span>
           <IconButton
-            disabled={!props.isCanvasActive}
-            onClick={props.togglePicker}
+            disabled={!isCanvasActive}
+            onClick={togglePicker}
             style={{
-              color: props.color,
-              filter: `drop-shadow(0 0 2px ${props.color})`,
+              color,
+              filter: `drop-shadow(0 0 2px ${color})`,
             }}
           >
             <PaletteRounded fontSize="large" />
-            <ColorPicker
-              active={props.isPickerActive}
-              onChange={props.onColorChange}
-            />
+            <ColorPicker active={isPickerActive} onChange={onColorChange} />
           </IconButton>
         </span>
       </Tooltip>
