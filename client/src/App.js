@@ -20,7 +20,7 @@ const Matcher = React.lazy(() => import('./components/matcher/Matcher'));
 const Picker = React.lazy(() => import('./components/picker/Picker'));
 const HowTo = React.lazy(() => import('./components/HowTo'));
 const Home = React.lazy(() => import('./components/Home'));
-const Profile = React.lazy(() => import('./components/Profile'));
+const Profile = React.lazy(() => import('./components/profile/Profile'));
 const ErrorPage = React.lazy(() => import('./components/ErrorPage'));
 
 class App extends React.Component {

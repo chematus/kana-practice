@@ -6,6 +6,7 @@ import { getCanvasTask } from '../TaskGenerator';
 import CanvasTask from './CanvasTask';
 import HotkeyHandler from 'react-hot-keys';
 import ValidatorDisplay from '../ValidatorDisplay';
+import PerformanceDisplay from '../PerformanceDisplay';
 
 export default ({ OCR, isReady }) => {
   const canvasRef = useRef(null);
@@ -17,6 +18,7 @@ export default ({ OCR, isReady }) => {
   const [isRangeActive, setIsRangeActive] = useState(false);
   const [isCanvasActive, setIsCanvasActive] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [totalAnswers, setTotalAnswers] = useState(6);
   const [taskObj, setTaskObj] = useState({ task: '', answer: '', abc: '' });
 
   const clear = () => {
@@ -85,6 +87,7 @@ export default ({ OCR, isReady }) => {
       })
       .then((data) => {
         if (taskObj.answer === data.trim()) {
+          setTotalAnswers((current) => current + 1);
           setIsCorrect(true);
           getTask(taskObj.answer);
         }
@@ -135,6 +138,9 @@ export default ({ OCR, isReady }) => {
   return (
     <HotkeyHandler keyName="z, x, c, v" onKeyDown={onKeyDown}>
       <div id="canvas-task">
+        <div id="canvas-performance">
+          <PerformanceDisplay total={totalAnswers} />
+        </div>
         <CanvasTask taskObj={{ ...taskObj }} getTask={() => getTask()} />
 
         <div id="canvas-container" className={isCanvasActive ? '' : 'disabled'}>

@@ -5,24 +5,25 @@ const getPerformance = (correct, total) => {
   return Math.round((correct / total) * 100);
 };
 
-export default ({ correct, total }) => {
-  const getGrade = (p) => {
-    switch (true) {
-      case p < 40:
-        return 'Bad';
-      case p < 70:
-        return 'Good';
-      case p < 90:
-        return 'Amazing';
-      case p <= 100:
-        return 'Perfect';
-      default:
-        return false;
-    }
-  };
+const getGrade = (p) => {
+  switch (true) {
+    case p < 40:
+      return 'Bad';
+    case p < 70:
+      return 'Good';
+    case p < 90:
+      return 'Amazing';
+    case p <= 100:
+      return 'Perfect';
+    default:
+      return false;
+  }
+};
 
+export default ({ correct, total }) => {
   return (
-    total > 5 && (
+    total > 4 &&
+    (correct ? (
       <Tooltip
         title={`${correct} of ${total} correct (${getPerformance(
           correct,
@@ -38,6 +39,8 @@ export default ({ correct, total }) => {
           <sup>*</sup>
         </span>
       </Tooltip>
-    )
+    ) : (
+      <span>{total} completed</span>
+    ))
   );
 };
