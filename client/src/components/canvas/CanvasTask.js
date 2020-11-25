@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { HelpOutlineRounded, ReplayRounded } from '@material-ui/icons';
-import { IconButton, Tooltip, Fade } from '@material-ui/core';
+import HelpOutlineRounded from '@material-ui/icons/HelpOutlineRounded';
+import ReplayRounded from '@material-ui/icons/ReplayRounded';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
 import CanvasModal from './CanvasModal';
 import placeholder from '../../assets/kana_stroke_order/placeholder.png';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fade } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
 import { CirclePicker } from 'react-color';
 
 export default ({ active, onChange }) => {

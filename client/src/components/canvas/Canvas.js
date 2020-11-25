@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CanvasControls from './CanvasControls';
 import ReactCanvasDraw from 'react-canvas-draw';
-import { CircularProgress, Fade } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 import { getCanvasTask } from '../TaskGenerator';
 import CanvasTask from './CanvasTask';
 import HotkeyHandler from 'react-hot-keys';
 import ValidatorDisplay from '../ValidatorDisplay';
 import PerformanceDisplay from '../PerformanceDisplay';
+
+import {
+  canvasTaskCompleted,
+  selectCanvasStats,
+  exportStats,
+  selectUserId,
+} from '../profile/userSlice';
 
 export default ({ OCR, isReady }) => {
   const canvasRef = useRef(null);
@@ -18,8 +27,11 @@ export default ({ OCR, isReady }) => {
   const [isRangeActive, setIsRangeActive] = useState(false);
   const [isCanvasActive, setIsCanvasActive] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
-  const [totalAnswers, setTotalAnswers] = useState(6);
   const [taskObj, setTaskObj] = useState({ task: '', answer: '', abc: '' });
+
+  const dispatch = useDispatch();
+  const { total } = useSelector(selectCanvasStats);
+  const userId = useSelector(selectUserId);
 
   const clear = () => {
     try {
@@ -79,15 +91,14 @@ export default ({ OCR, isReady }) => {
         if (process.env.NODE_ENV === 'development') {
           console.log(
             `Input: ${data.trim()} 
-            Task: ${taskObj.answer}
-            Check 1: ${data.trim() === taskObj.answer}`,
+            Task: ${taskObj.answer}`,
           );
         }
         return data;
       })
       .then((data) => {
         if (taskObj.answer === data.trim()) {
-          setTotalAnswers((current) => current + 1);
+          dispatch(canvasTaskCompleted());
           setIsCorrect(true);
           getTask(taskObj.answer);
         }
@@ -128,6 +139,7 @@ export default ({ OCR, isReady }) => {
 
   useEffect(() => {
     getTask();
+    return () => userId.length && dispatch(exportStats());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -139,7 +151,7 @@ export default ({ OCR, isReady }) => {
     <HotkeyHandler keyName="z, x, c, v" onKeyDown={onKeyDown}>
       <div id="canvas-task">
         <div id="canvas-performance">
-          <PerformanceDisplay total={totalAnswers} />
+          <PerformanceDisplay total={total} />
         </div>
         <CanvasTask taskObj={{ ...taskObj }} getTask={() => getTask()} />
 

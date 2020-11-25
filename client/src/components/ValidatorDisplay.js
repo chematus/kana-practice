@@ -1,5 +1,6 @@
 import React from 'react';
-import { DoneRounded, ClearRounded } from '@material-ui/icons';
+import DoneRounded from '@material-ui/icons/DoneRounded';
+import ClearRounded from '@material-ui/icons/ClearRounded';
 
 export default ({ correct }) => {
   const classActive = 'validator-icon active';

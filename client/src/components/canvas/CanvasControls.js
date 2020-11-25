@@ -1,12 +1,12 @@
 import React from 'react';
-import { Fade, IconButton, Tooltip } from '@material-ui/core';
-import {
-  UndoRounded,
-  DeleteRounded,
-  PaletteRounded,
-  BrushRounded,
-  ErrorOutlineRounded,
-} from '@material-ui/icons';
+import Fade from '@material-ui/core/Fade';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import UndoRounded from '@material-ui/icons/UndoRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
+import PaletteRounded from '@material-ui/icons/PaletteRounded';
+import BrushRounded from '@material-ui/icons/BrushRounded';
+import ErrorOutlineRounded from '@material-ui/icons/ErrorOutlineRounded';
 import ColorPicker from './ColorPicker';
 import SizeRange from './SizeRange';
 

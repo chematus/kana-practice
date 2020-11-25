@@ -693,6 +693,10 @@ button.profile-tab {
   font-size: 3rem;
 }
 
+#profile-stats .MuiTabs-flexContainer {
+  justify-content: center;
+}
+
 #canvas-performance {
   margin-bottom: 12px;
   min-height: 2.5rem;
@@ -704,4 +708,8 @@ button.profile-tab {
     font-family: inherit;
     @extend %shadowed-text;
   }
+}
+
+.MuiAlert-message {
+  font-size: 1.5rem;
 }

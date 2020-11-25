@@ -1,8 +1,5 @@
 import React, { Suspense } from 'react';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers/rootReducer';
+import { CircularProgress } from '@material-ui/core';
 import {
   unstable_createMuiStrictModeTheme as createMuiTheme,
   ThemeProvider,
@@ -11,9 +8,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import logo from './assets/logo.svg';
-import { CircularProgress } from '@material-ui/core';
-import './styles/App.scss';
+import MessageToast from './components/MessageToast';
 import CanvasOCR from './components/canvas/CanvasOCR';
+import './styles/App.scss';
 
 const Canvas = React.lazy(() => import('./components/canvas/Canvas'));
 const Matcher = React.lazy(() => import('./components/matcher/Matcher'));
@@ -36,7 +33,6 @@ class App extends React.Component {
         },
       },
     });
-    this.store = createStore(rootReducer, applyMiddleware(thunk));
     //this.OCR = new CanvasOCR();
     //this.canvasReady = this.OCR.prepareWorker();
   }
@@ -44,41 +40,40 @@ class App extends React.Component {
   render() {
     return (
       <ThemeProvider theme={this.theme}>
-        <Provider store={this.store}>
-          <Router>
-            <Header logo={logo} />
-            <main>
-              <Suspense
-                fallback={<CircularProgress className="circular-loader" />}
-              >
-                <Switch>
-                  <Route path="/canvas">
-                    <Canvas /*OCR={this.OCR} isReady={this.canvasReady}*/ />
-                  </Route>
-                  <Route path="/pick">
-                    <Picker />
-                  </Route>
-                  <Route path="/match">
-                    <Matcher />
-                  </Route>
-                  <Route path="/howto">
-                    <HowTo />
-                  </Route>
-                  <Route path="/profile">
-                    <Profile />
-                  </Route>
-                  <Route exact path="/">
-                    <Home />
-                  </Route>
-                  <Route>
-                    <ErrorPage message="Page not found" />
-                  </Route>
-                </Switch>
-              </Suspense>
-            </main>
-            <Footer />
-          </Router>
-        </Provider>
+        <Router>
+          <Header logo={logo} />
+          <main>
+            <Suspense
+              fallback={<CircularProgress className="circular-loader" />}
+            >
+              <Switch>
+                <Route path="/canvas">
+                  <Canvas /*OCR={this.OCR} isReady={this.canvasReady}*/ />
+                </Route>
+                <Route path="/pick">
+                  <Picker />
+                </Route>
+                <Route path="/match">
+                  <Matcher />
+                </Route>
+                <Route path="/howto">
+                  <HowTo />
+                </Route>
+                <Route path="/profile">
+                  <Profile />
+                </Route>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route>
+                  <ErrorPage message="Page not found" />
+                </Route>
+              </Switch>
+            </Suspense>
+          </main>
+          <MessageToast />
+          <Footer />
+        </Router>
       </ThemeProvider>
     );
   }

@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import React from 'react';
 
 export default ({ id, active, disabled, column, char, handleClick }) => {

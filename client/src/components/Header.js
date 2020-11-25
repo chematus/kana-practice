@@ -1,5 +1,7 @@
 import React from 'react';
-import { ButtonBase, Fade, Tooltip } from '@material-ui/core';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Fade from '@material-ui/core/Fade';
+import Tooltip from '@material-ui/core/Tooltip';
 import { Link } from 'react-router-dom';
 import NavElement from './NavElement';
 

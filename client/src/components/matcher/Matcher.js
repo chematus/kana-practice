@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getMatcherTask } from '../TaskGenerator';
 import MatcherOption from './MatcherOption';
 import ValidatorDisplay from '../ValidatorDisplay';
 import PerformanceDisplay from '../PerformanceDisplay';
+import {
+  matcherTaskCompleted,
+  selectMatcherStats,
+  exportStats,
+  selectUserId,
+} from '../profile/userSlice';
 
 export default (props) => {
   const [task, setTask] = useState([]);
   const [leftOption, setLeftOption] = useState({ list: [], id: 0, char: '' });
   const [rightOption, setRightOption] = useState({ list: [], id: 0, char: '' });
   const [disabledList, setDisabledList] = useState([]);
-  const [correct, setCorrect] = useState(null);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [totalAnswers, setTotalAnswers] = useState(0);
+  const [isCorrect, setIsCorrect] = useState(null);
+
+  const dispatch = useDispatch();
+  const { total, correct } = useSelector(selectMatcherStats);
+  const userId = useSelector(selectUserId);
 
   const getTask = () => {
     const taskList = getMatcherTask();
@@ -48,20 +57,19 @@ export default (props) => {
       const list = [...disabledList, id1, id2];
       if (list.length >= task.length * 2) {
         setDisabledList([]);
-        setCorrect(true);
-        setCorrectAnswers((current) => current + 1);
+        setIsCorrect(true);
         getTask();
       } else {
         setDisabledList(list);
-        setCorrect(true);
-        setCorrectAnswers((current) => current + 1);
+        setIsCorrect(true);
       }
+      dispatch(matcherTaskCompleted(true));
     } else {
-      setCorrect(false);
+      setIsCorrect(false);
+      dispatch(matcherTaskCompleted(false));
     }
     setLeftOption((current) => ({ ...current, id: '', char: '' }));
     setRightOption((current) => ({ ...current, id: '', char: '' }));
-    setTotalAnswers((current) => current + 1);
   };
 
   const handleClick = (column, char, e) => {
@@ -72,13 +80,14 @@ export default (props) => {
     } else {
       setRightOption((current) => ({ ...current, char, id }));
     }
-    setCorrect(null);
+    setIsCorrect(null);
 
     return false;
   };
 
   useEffect(() => {
     getTask();
+    return () => userId.length && dispatch(exportStats());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -95,7 +104,7 @@ export default (props) => {
   return (
     <div id="matcher-container">
       <div id="matcher-performance">
-        <PerformanceDisplay correct={correctAnswers} total={totalAnswers} />
+        <PerformanceDisplay correct={correct} total={total} />
       </div>
       <div id="matcher-task">Match the pairs</div>
       <div id="matcher-options-wrapper">
@@ -116,7 +125,7 @@ export default (props) => {
             );
           })}
         </div>
-        <ValidatorDisplay correct={correct} />
+        <ValidatorDisplay correct={isCorrect} />
         <div id="matcher-options-right">
           {rightOption.list.map((item, key) => {
             const id = key + '_2';

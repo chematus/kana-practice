@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { ButtonBase, Menu, MenuItem } from '@material-ui/core';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
 
 const isActive = (match, location, list) => {

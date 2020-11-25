@@ -37,12 +37,16 @@ userController.post(
   async (req, res) => {
     try {
       const { email } = jwtDecode(req.headers.authorization);
-      const { stats } = req.body;
+      const stats = req.body;
+      const newStats = {};
+      Object.keys(stats).forEach((key) => {
+        newStats[`stats.${key}`] = stats[key];
+      });
       if (stats && email) {
         await User.updateOne(
           { email },
           {
-            $set: { ...{ stats } },
+            $set: newStats,
           },
         );
         return res.status(200).json({

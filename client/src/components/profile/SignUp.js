@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { signUp } from './userSlice';
 
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const usernameRegex = /^[\w]{4,}$/i;
+const usernameRegex = /^[\w]{4,10}$/i;
 
-export default ({ handleSubmit }) => {
+export default (props) => {
   const [isPwdConfirmed, setIsPwdConfirmed] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConf, setPasswordConf] = useState('');
+
+  const dispatch = useDispatch();
+
+  const handleSignUp = (username, email, password) => {
+    dispatch(signUp({ username, email, password }));
+  };
 
   useEffect(() => {
     setIsPwdConfirmed(password === passwordConf);
@@ -26,14 +35,20 @@ export default ({ handleSubmit }) => {
   }, [username, email, password, passwordConf]);
 
   return (
-    <form id="signin-form" className="auth-form" noValidate autoComplete="off">
+    <form
+      id="signin-form"
+      className="auth-form"
+      noValidate
+      autoComplete="off"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <TextField
         value={username}
         error={!!username.length && !usernameRegex.test(username)}
         id="auth-name"
         className="form-input"
         label="Username"
-        helperText="4 characters minimum"
+        helperText="4-10 characters"
         onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
@@ -65,9 +80,10 @@ export default ({ handleSubmit }) => {
         onChange={(e) => setPasswordConf(e.target.value)}
       />
       <Button
+        type="submit"
         className="auth-button"
         disabled={!isVerified}
-        onClick={() => handleSubmit(username, email, password)}
+        onClick={() => handleSignUp(username, email, password)}
       >
         Sign Up
       </Button>

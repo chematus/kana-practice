@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PerformanceDisplay from '../PerformanceDisplay';
 import { getPickerTask } from '../TaskGenerator';
 import PickerOption from './PickerOption';
+
+import {
+  pickerTaskCompleted,
+  selectPickerStats,
+  exportStats,
+  selectUserId,
+} from '../profile/userSlice';
 
 export default (props) => {
   const [task, setTask] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [options, setOptions] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [correct, setCorrect] = useState(0);
   const [clicked, setClicked] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
+
+  const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
+  const { correct, total } = useSelector(selectPickerStats);
 
   const getTask = (current) => {
     const pickerTask = getPickerTask(current);
@@ -23,13 +33,12 @@ export default (props) => {
 
   const handleOptionClick = (e, selectedOption) => {
     const TRANSITION_TIMEOUT = 500;
-
     try {
-      setTotal((total) => total + 1);
       setClicked(true);
-
       if (answer === selectedOption) {
-        setCorrect((correct) => correct + 1);
+        dispatch(pickerTaskCompleted(true));
+      } else {
+        dispatch(pickerTaskCompleted(false));
       }
       setSelectedOption(selectedOption);
 
@@ -41,6 +50,7 @@ export default (props) => {
 
   useEffect(() => {
     getTask();
+    return () => userId.length && dispatch(exportStats());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

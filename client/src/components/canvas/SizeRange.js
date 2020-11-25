@@ -1,5 +1,6 @@
 import React from 'react';
-import { Fade, Slider } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
+import Slider from '@material-ui/core/Slider';
 
 export default ({ active, onChange }) => {
   return (

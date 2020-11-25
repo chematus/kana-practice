@@ -1,5 +1,6 @@
 import React from 'react';
-import { Fade, Tooltip } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const getPerformance = (correct, total) => {
   return Math.round((correct / total) * 100);
