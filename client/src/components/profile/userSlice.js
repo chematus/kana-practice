@@ -2,16 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const apiEndpoints = {
-  signIn: 'http://localhost:8000/signin',
-  signUp: 'http://localhost:8000/signup',
-  stats: 'http://localhost:8000/user',
+  signIn: 'http://192.168.100.11:8000/user/signin',
+  signUp: 'http://192.168.100.11:8000/user/signup',
+  userInfo: 'http://192.168.100.11:8000/user',
 };
 
 const initialState = {
-  id: '',
   username: '',
   email: '',
-  token: '',
+  isLoggedIn: false,
   status: 'idle',
   error: null,
   stats: {
@@ -26,20 +25,46 @@ const initialState = {
     canvas: {
       total: 0,
     },
+    weakspot: {},
   },
 };
 
-export const signUp = createAsyncThunk('user/signUp', async (userData) => {
-  const userObj = await axios.post(apiEndpoints.signUp, userData);
-  return userObj.data;
-});
+const getHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+};
+
+export const autoSignIn = createAsyncThunk(
+  'user/autoSignIn',
+  async (_, { rejectWithValue }) => {
+    return axios
+      .get(apiEndpoints.userInfo, {
+        headers: getHeaders(),
+      })
+      .then((res) => res.data)
+      .catch((e) => rejectWithValue(e.response.data));
+  },
+);
+
+export const signUp = createAsyncThunk(
+  'user/signUp',
+  async (userData, { rejectWithValue }) =>
+    axios
+      .post(apiEndpoints.signUp, userData)
+      .then((res) => res.data)
+      .catch((e) => rejectWithValue(e.response.data)),
+);
 
 export const signIn = createAsyncThunk(
   'user/signIn',
-  (userData, { rejectWithValue }) =>
+  async (userData, { rejectWithValue }) =>
     axios
       .post(apiEndpoints.signIn, userData)
-      .then((res) => res.payload.data)
+      .then((res) => res.data)
       .catch((e) => rejectWithValue(e.response.data)),
 );
 
@@ -47,12 +72,10 @@ export const exportStats = createAsyncThunk(
   'user/exportStats',
   async (_, { getState }) => {
     const {
-      user: { token, stats },
+      user: { stats },
     } = getState();
-    const result = await axios.post(apiEndpoints.stats, stats, {
-      headers: {
-        Authorization: 'Bearer ' + token,
-      },
+    const result = await axios.post(apiEndpoints.userInfo, stats, {
+      headers: getHeaders(),
     });
     return result.data;
   },
@@ -63,14 +86,24 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     pickerTaskCompleted(state, action) {
-      if (action.payload) {
+      const { isCorrect, kana } = action.payload;
+      const list = { ...state.stats.weakspot };
+      if (isCorrect) {
         state.stats.picker.correct++;
+      } else {
+        list[kana] ? list[kana]++ : (list[kana] = 1);
+        state.stats.weakspot = list;
       }
       state.stats.picker.total++;
     },
     matcherTaskCompleted(state, action) {
-      if (action.payload) {
+      const { isCorrect, kana } = action.payload;
+      const list = { ...state.stats.weakspot };
+      if (isCorrect) {
         state.stats.matcher.correct++;
+      } else {
+        list[kana] ? list[kana]++ : (list[kana] = 1);
+        state.stats.weakspot = list;
       }
       state.stats.matcher.total++;
     },
@@ -78,10 +111,10 @@ const userSlice = createSlice({
       state.stats.canvas.total++;
     },
     userLoggedOut(state, action) {
+      localStorage.clear();
       state.username = '';
       state.email = '';
-      state.token = '';
-      state.id = '';
+      state.isLoggedIn = false;
       state.stats.picker = {
         correct: 0,
         total: 0,
@@ -93,6 +126,7 @@ const userSlice = createSlice({
       state.stats.canvas = {
         total: 0,
       };
+      state.stats.weakspot = {};
     },
     flushError(state, action) {
       state.error = null;
@@ -105,40 +139,70 @@ const userSlice = createSlice({
     },
     [signUp.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      const { username, email, token, _id: id, stats } = action.payload;
+      const { username, email, token, stats } = action.payload;
+      localStorage.setItem('token', token);
       state.username = username;
       state.email = email;
-      state.token = token;
-      state.id = id;
+      state.isLoggedIn = true;
       state.stats = stats;
     },
     [signUp.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error = action.payload.errMsg;
+      state.error = action.payload?.errMsg || 'Something went wrong';
     },
     [signIn.pending]: (state, action) => {
       state.status = 'processing';
     },
     [signIn.fulfilled]: (state, action) => {
       state.status = 'succeeded';
-      const { username, email, token, _id: id, stats } = action.payload;
+      const { username, email, token, stats } = action.payload;
+      localStorage.setItem('token', token);
       state.username = username;
       state.email = email;
-      state.token = token;
-      state.id = id;
+      state.isLoggedIn = true;
       state.stats.picker.correct += stats.picker.correct;
       state.stats.picker.total += stats.picker.total;
       state.stats.matcher.correct += stats.matcher.correct;
       state.stats.matcher.total += stats.matcher.total;
       state.stats.canvas.total += stats.canvas.total;
+      if (stats.weakspot) {
+        const keysList = [
+          ...new Set([
+            ...Object.keys(state.stats.weakspot),
+            ...Object.keys(stats.weakspot),
+          ]),
+        ];
+        keysList.forEach((key) => {
+          if (state.stats.weakspot[key]) {
+            state.stats.weakspot[key] += stats.weakspot[key] || 0;
+          } else {
+            state.stats.weakspot[key] = 1;
+          }
+        });
+      }
     },
     [signIn.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error = action.payload.errMsg;
+      state.error = action.payload?.errMsg || 'Something went wrong';
     },
     [exportStats.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error = action.error;
+      state.error = action?.error || 'Something went wrong';
+    },
+    [autoSignIn.pending]: (state, action) => {
+      state.status = 'processing';
+    },
+    [autoSignIn.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      const { username, email, token, stats } = action.payload;
+      localStorage.setItem('token', token);
+      state.username = username;
+      state.email = email;
+      state.isLoggedIn = true;
+      state.stats = stats;
+    },
+    [autoSignIn.rejected]: (state, action) => {
+      state.status = 'failed';
     },
   },
 });
@@ -158,7 +222,7 @@ export const selectUserInfo = (state) => ({
   email: state.user.email,
 });
 export const selectUserObj = (state) => state.user;
-export const selectUserId = (state) => state.user.id;
+export const selectIsLoggedIn = (state) => state.user.isLoggedIn;
 export const selectMatcherStats = (state) => state.user.stats.matcher;
 export const selectPickerStats = (state) => state.user.stats.picker;
 export const selectCanvasStats = (state) => state.user.stats.canvas;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { signUp } from './userSlice';
+import { signUp, selectUserStats } from './userSlice';
 
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const usernameRegex = /^[\w]{4,10}$/i;
@@ -16,9 +16,10 @@ export default (props) => {
   const [passwordConf, setPasswordConf] = useState('');
 
   const dispatch = useDispatch();
+  const stats = useSelector(selectUserStats);
 
   const handleSignUp = (username, email, password) => {
-    dispatch(signUp({ username, email, password }));
+    dispatch(signUp({ username, email, password, stats }));
   };
 
   useEffect(() => {

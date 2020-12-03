@@ -19,9 +19,11 @@
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.1",
+    "lz-string": "^1.4.4",
     "mongoose": "^5.10.11",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "tesseract.js": "^2.1.4",
     "winston": "^3.3.3"
   },
   "devDependencies": {

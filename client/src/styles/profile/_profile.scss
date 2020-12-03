@@ -1,0 +1,123 @@
+@import 'styles/variables';
+@import 'styles/extends';
+@import 'styles/mixins';
+
+#auth-container {
+  max-width: 400px;
+  background-color: $canvas-color;
+
+  .MuiTabs-flexContainer {
+    justify-content: center;
+  }
+}
+
+.auth-form {
+  font-family: inherit;
+}
+
+button.auth-tab {
+  font-size: 1.4rem;
+  font-family: inherit;
+  @extend %shadowed-text;
+}
+
+.auth-form .form-input {
+  margin: 5px 30px;
+
+  label {
+    font-family: inherit;
+    color: $focus-shadow-color;
+    @extend %shadowed-text;
+  }
+
+  input {
+    font-size: 2rem;
+    font-family: inherit;
+    color: $text-color;
+    @extend %shadowed-text;
+  }
+
+  p {
+    font-size: 1rem;
+    @extend %shadowed-text;
+    color: $focus-shadow-color;
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 2rem;
+  }
+}
+
+.auth-form .auth-button {
+  width: fit-content;
+  margin: 5px auto 10px;
+  font-size: 2rem;
+  @extend %shadowed-button;
+  font-family: inherit;
+}
+
+.auth-form .MuiInput-underline:before {
+  border-color: $focus-shadow-color !important;
+}
+
+#profile-container {
+  font-size: 1.5rem;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  @extend %shadowed-text;
+  padding: 20px 20px 0 20px;
+}
+
+@media screen and (max-width: 780px) {
+  #auth-container {
+    min-width: 80%;
+  }
+}
+
+#profile-username {
+  font-size: 3.5rem;
+}
+
+#profile-email {
+  margin: 5px auto;
+  font-size: 1.5rem;
+}
+
+#profile-container .profile-button {
+  font-size: 2rem;
+  @extend %shadowed-button;
+  margin: 10px auto;
+  font-family: inherit;
+}
+
+button.profile-tab {
+  font-family: inherit;
+  @extend %shadowed-text;
+  font-size: 1.5rem;
+}
+
+#profile-stats-header {
+  font-size: 2rem;
+  margin: 50px auto 10px;
+}
+
+.profile-perf-info {
+  display: flex;
+  height: 100px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  @include text-select(none);
+}
+
+#profile-stats .MuiTabs-flexContainer {
+  justify-content: center;
+}

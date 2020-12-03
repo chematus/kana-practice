@@ -3,9 +3,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PerformanceDisplay from '../PerformanceDisplay';
+import PerformanceDisplay from 'components/utils/PerformanceDisplay';
 
 import { selectUserInfo, selectUserStats, userLoggedOut } from './userSlice';
+
+const getWeakspotList = (stats, limit = 5) => {
+  const { weakspot: data } = stats;
+  const total = Object.entries(stats)
+    .map((item) => item[1])
+    .filter((item) => item.total)
+    .reduce((acc, cur) => acc + cur.total, 0);
+  const result = data
+    ? Object.entries(data)
+        .sort((a, b) => b[1] - a[1])
+        .map((item) => [item[0], Math.round((item[1] / total) * 100)])
+        .slice(0, limit)
+    : [];
+  return result;
+};
 
 export default (props) => {
   const [tabActive, setTabActive] = useState(0);
@@ -35,10 +50,10 @@ export default (props) => {
           onChange={handleTabChange}
         >
           {Object.keys(stats).map((key) => {
-            if (stats[key].total < 5) {
-              return false;
+            if (stats[key].total > 4) {
+              return <Tab label={key} className="profile-tab" key={key} />;
             }
-            return <Tab label={key} className="profile-tab" key={key} />;
+            return false;
           })}
         </Tabs>
 
@@ -47,6 +62,7 @@ export default (props) => {
           <PerformanceDisplay
             correct={stats[Object.keys(stats)[tabActive]].correct}
             total={stats[Object.keys(stats)[tabActive]].total}
+            weakspot={getWeakspotList(stats)}
           />
         </div>
       </div>

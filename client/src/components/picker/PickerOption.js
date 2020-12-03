@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button';
 import React from 'react';
-import ValidatorDisplay from '../ValidatorDisplay';
+import ValidatorDisplay from 'components/utils/ValidatorDisplay';
 
 export default ({ selected, correct, handleClick, item }) => {
   let isCorrect = null;

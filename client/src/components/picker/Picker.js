@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PerformanceDisplay from '../PerformanceDisplay';
-import { getPickerTask } from '../TaskGenerator';
+import PerformanceDisplay from 'components/utils/PerformanceDisplay';
+import { getPickerTask, getKana } from 'components/utils/TaskGenerator';
 import PickerOption from './PickerOption';
 
 import {
   pickerTaskCompleted,
   selectPickerStats,
   exportStats,
-  selectUserId,
-} from '../profile/userSlice';
+  selectIsLoggedIn,
+} from 'components/profile/userSlice';
 
 export default (props) => {
   const [task, setTask] = useState(null);
@@ -19,7 +19,7 @@ export default (props) => {
   const [selectedOption, setSelectedOption] = useState('');
 
   const dispatch = useDispatch();
-  const userId = useSelector(selectUserId);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const { correct, total } = useSelector(selectPickerStats);
 
   const getTask = (current) => {
@@ -36,13 +36,21 @@ export default (props) => {
     try {
       setClicked(true);
       if (answer === selectedOption) {
-        dispatch(pickerTaskCompleted(true));
+        dispatch(pickerTaskCompleted({ isCorrect: true }));
       } else {
-        dispatch(pickerTaskCompleted(false));
+        dispatch(
+          pickerTaskCompleted({
+            isCorrect: false,
+            kana: getKana(answer, task),
+          }),
+        );
       }
       setSelectedOption(selectedOption);
 
-      setTimeout(() => getTask(answer), TRANSITION_TIMEOUT);
+      setTimeout(() => {
+        setSelectedOption('');
+        return getTask(answer);
+      }, TRANSITION_TIMEOUT);
     } catch (e) {
       console.error(e);
     }
@@ -50,7 +58,7 @@ export default (props) => {
 
   useEffect(() => {
     getTask();
-    return () => userId.length && dispatch(exportStats());
+    return () => isLoggedIn && dispatch(exportStats());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

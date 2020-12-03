@@ -9,13 +9,13 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import Stats from './Stats';
 
-import { selectUserId, selectReqStatus } from './userSlice';
+import { selectIsLoggedIn, selectReqStatus } from './userSlice';
 
 export default (props) => {
   const [tabActive, setTabActive] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const userId = useSelector(selectUserId);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   const reqStatus = useSelector(selectReqStatus);
 
   const onTabChange = (e, val) => {
@@ -30,7 +30,7 @@ export default (props) => {
     <>
       <Fade in={!isDisabled}>
         <Paper square id="auth-container">
-          {userId.length ? (
+          {isLoggedIn ? (
             <Stats />
           ) : (
             <>

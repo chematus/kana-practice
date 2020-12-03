@@ -8,3 +8,5 @@ export const PASSWORD_WRONG = 'Password is wrong';
 export const USER_TAKEN = 'User exists already';
 export const USER_WRONG = 'Wrong email or password';
 export const ERROR_UNKNOWN = 'Something went wrong';
+export const WRONG_DATA = 'Invalid or insufficient data';
+export const OCR_FAILED = "Can't process image";

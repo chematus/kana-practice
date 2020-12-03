@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMatcherTask } from '../TaskGenerator';
+import { getMatcherTask, getKana } from 'components/utils/TaskGenerator';
 import MatcherOption from './MatcherOption';
-import ValidatorDisplay from '../ValidatorDisplay';
-import PerformanceDisplay from '../PerformanceDisplay';
+import ValidatorDisplay from 'components/utils/ValidatorDisplay';
+import PerformanceDisplay from 'components/utils/PerformanceDisplay';
+
 import {
   matcherTaskCompleted,
   selectMatcherStats,
   exportStats,
-  selectUserId,
-} from '../profile/userSlice';
+  selectIsLoggedIn,
+} from 'components/profile/userSlice';
 
 export default (props) => {
   const [task, setTask] = useState([]);
@@ -20,7 +21,7 @@ export default (props) => {
 
   const dispatch = useDispatch();
   const { total, correct } = useSelector(selectMatcherStats);
-  const userId = useSelector(selectUserId);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const getTask = () => {
     const taskList = getMatcherTask();
@@ -63,10 +64,15 @@ export default (props) => {
         setDisabledList(list);
         setIsCorrect(true);
       }
-      dispatch(matcherTaskCompleted(true));
+      dispatch(matcherTaskCompleted({ isCorrect: true }));
     } else {
       setIsCorrect(false);
-      dispatch(matcherTaskCompleted(false));
+      dispatch(
+        matcherTaskCompleted({
+          isCorrect: false,
+          kana: getKana(leftOption.char, rightOption.char),
+        }),
+      );
     }
     setLeftOption((current) => ({ ...current, id: '', char: '' }));
     setRightOption((current) => ({ ...current, id: '', char: '' }));
@@ -87,7 +93,7 @@ export default (props) => {
 
   useEffect(() => {
     getTask();
-    return () => userId.length && dispatch(exportStats());
+    return () => isLoggedIn && dispatch(exportStats());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

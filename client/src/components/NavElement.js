@@ -1,71 +1,78 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
+import { IconButton } from '@material-ui/core';
 
-const isActive = (match, location, list) => {
-  return list && list.length
-    ? list.some((item) => item.link === match.url)
-    : false;
-};
+export default ({ main, aria, subitems }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
 
-export default ({ main, aria, subitems, extended }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef();
-
-  const showMenu = (active = false) => {
-    setIsOpen(active);
+  const handleOpen = (e) => {
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
   };
 
-  const generateSubmenu = () => {
-    let submenu = null;
-    if (subitems && subitems.length) {
-      submenu = (
+  const isActive = (match, location, list = null) => {
+    if (list) {
+      return list.some((item) => item.url === location.pathname);
+    }
+    return match?.url === location.pathname;
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const getSubmenu = () => {
+    return (
+      subitems?.length && (
         <Menu
           id={aria}
-          open={isOpen}
-          anchorEl={ref.current}
+          open={!!anchorEl}
+          anchorEl={anchorEl}
           className="nav-menu"
-          onClose={() => showMenu(false)}
+          onClose={handleClose}
         >
-          {subitems.map((item, key) => (
+          {subitems.map(({ url = '#', name }, key) => (
             <MenuItem
               component={NavLink}
               key={key}
               className="nav-link"
               activeClassName="nav-link active"
-              onClick={() => showMenu(false)}
-              to={extended ? main.link + item.link : item.link}
+              onClick={handleClose}
+              to={url}
+              exact
+              isActive={isActive}
             >
-              {item.name}
+              {name}
             </MenuItem>
           ))}
         </Menu>
-      );
-    }
-    return submenu;
+      )
+    );
+  };
+
+  const params = {
+    'aria-controls': aria,
+    'aria-haspopup': true,
+    className: 'nav-link',
+    focusRipple: true,
+    exact: true,
+    onClick: subitems && handleOpen,
+    component: NavLink,
+    to: main.url || '',
+    isActive: (match, location) => isActive(match, location, subitems),
   };
 
   return (
     <>
-      <ButtonBase
-        aria-controls={aria}
-        aria-haspopup="true"
-        className="nav-link"
-        focusRipple={true}
-        exact
-        onClick={() => showMenu(true)}
-        ref={ref}
-        component={NavLink}
-        to={main.link || '#'}
-        isActive={(match, location, subitems) =>
-          isActive(match, location, subitems)
-        }
-      >
-        {main.name}
-      </ButtonBase>
-      {generateSubmenu()}
+      {main.name ? (
+        <ButtonBase {...params}>{main.name}</ButtonBase>
+      ) : (
+        <IconButton {...params}>{main.icon}</IconButton>
+      )}
+      {getSubmenu()}
     </>
   );
 };

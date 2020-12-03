@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { MoodBadRounded } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
+import MoodBadRounded from '@material-ui/icons/MoodBadRounded';
 
 export default ({ message }) => {
   return (
@@ -9,7 +10,7 @@ export default ({ message }) => {
         <MoodBadRounded id="not-found-svg" />
         <span>{message}</span>
       </div>
-      <Button id="home-button" href="/">
+      <Button component={Link} id="home-button" to="/">
         Go Home
       </Button>
     </div>

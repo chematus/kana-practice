@@ -1,0 +1,45 @@
+@mixin text-select($isSelectable) {
+  -webkit-touch-callout: $isSelectable;
+  -webkit-user-select: $isSelectable;
+  -khtml-user-select: $isSelectable;
+  -moz-user-select: $isSelectable;
+  -ms-user-select: $isSelectable;
+  user-select: $isSelectable;
+}
+
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    @content;
+  }
+  @-moz-keyframes #{$animationName} {
+    @content;
+  }
+  @-o-keyframes #{$animationName} {
+    @content;
+  }
+  @keyframes #{$animationName} {
+    @content;
+  }
+}
+
+@mixin animation($duration, $animation, $iteration-count: infinite) {
+  -webkit-animation-duration: $duration;
+  -webkit-animation-name: $animation;
+  -webkit-animation-iteration-count: $iteration-count;
+
+  -moz-animation-duration: $duration;
+  -moz-animation-name: $animation;
+  -moz-animation-iteration-count: $iteration-count;
+
+  animation-duration: $duration;
+  animation-name: $animation;
+  animation-iteration-count: $iteration-count;
+}
+
+@mixin transform($params) {
+  -webkit-transform: $params;
+  -moz-transform: $params;
+  -o-transform: $params;
+  -ms-transform: $params;
+  transform: $params;
+}

@@ -89,7 +89,8 @@ export default ({
         title="The handwriting recognition system is not ideal, so if you encounter any errors feel free to skip the challenge."
         TransitionComponent={Fade}
         placement="left"
-        arrow
+        enterTouchDelay={0}
+        leaveTouchDelay={5000}
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <IconButton id="canvas-disclaimer" disableFocusRipple disableRipple>

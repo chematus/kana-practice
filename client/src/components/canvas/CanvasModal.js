@@ -6,7 +6,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 
-export default ({ active, toggleModal, img }) => {
+export default ({ active, toggleModal, abc, task }) => {
   return (
     <Modal
       open={active}
@@ -18,7 +18,10 @@ export default ({ active, toggleModal, img }) => {
           <Card>
             <CardActionArea onClick={toggleModal}>
               <CardContent>
-                <CardMedia image={img} className="modal-media" />
+                <CardMedia
+                  image={`/img/kana_stroke_order/${abc}/${task}.gif`}
+                  className="modal-media"
+                />
               </CardContent>
             </CardActionArea>
           </Card>

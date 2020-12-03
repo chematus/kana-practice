@@ -27,6 +27,7 @@ const UserSchema = mongoose.Schema(
       canvas: {
         total: { type: Number, default: 0 },
       },
+      weakspot: {},
     },
   },
   { timestamps: true },

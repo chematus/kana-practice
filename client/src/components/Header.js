@@ -1,6 +1,6 @@
 import React from 'react';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Fade from '@material-ui/core/Fade';
+import MenuRounded from '@material-ui/icons/MenuRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Link } from 'react-router-dom';
 import NavElement from './NavElement';
@@ -10,7 +10,6 @@ export default ({ logo }) => {
     <header>
       <Tooltip
         title="Kana Practice"
-        transition={Fade}
         placement="bottom"
         classes={{ tooltip: 'controls-tooltip' }}
       >
@@ -19,28 +18,36 @@ export default ({ logo }) => {
         </ButtonBase>
       </Tooltip>
       <nav>
-        <ul>
+        <div className="menu-container-mobile">
+          <NavElement
+            aria="mobile"
+            main={{ icon: <MenuRounded /> }}
+            subitems={[
+              { name: 'Practice', url: '/howto' },
+              { name: 'Profile', url: '/profile' },
+              { name: 'About', url: '/' },
+            ]}
+          />
+        </div>
+        <ul className="menu-container">
           <li>
-            <NavElement
-              aria="howto"
-              main={{ name: 'How To', link: '/howto' }}
-            />
+            <NavElement aria="howto" main={{ name: 'How To', url: '/howto' }} />
           </li>
           <li>
             <NavElement
               aria="practice"
-              main={{ name: 'Practice', link: '#' }}
+              main={{ name: 'Practice' }}
               subitems={[
-                { name: 'Pick one', link: '/pick' },
-                { name: 'Match pairs', link: '/match' },
-                { name: 'Draw kana', link: '/canvas' },
+                { name: 'Pick one', url: '/pick' },
+                { name: 'Match pairs', url: '/match' },
+                { name: 'Draw kana', url: '/canvas' },
               ]}
             />
           </li>
           <li>
             <NavElement
               aria="profile"
-              main={{ name: 'Profile', link: '/profile' }}
+              main={{ name: 'Profile', url: '/profile' }}
             />
           </li>
           <li>
