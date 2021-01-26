@@ -8,6 +8,7 @@ export default ({ id, active, disabled, column, char, handleClick }) => {
       className={active ? 'matcher-option-active' : ''}
       disabled={disabled}
       onClick={(e) => handleClick(column, char, e)}
+      data-testid={`matcher-option-${column}`}
     >
       {char}
     </Button>

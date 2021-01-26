@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const apiBaseUrl = process.env.API_URL || 'http://192.168.100.11:8000/user';
 const apiEndpoints = {
-  signIn: 'http://192.168.100.11:8000/user/signin',
-  signUp: 'http://192.168.100.11:8000/user/signup',
-  userInfo: 'http://192.168.100.11:8000/user',
+  signIn: `${apiBaseUrl}/signin`,
+  signUp: `${apiBaseUrl}/signup`,
+  userInfo: apiBaseUrl,
 };
 
 const initialState = {

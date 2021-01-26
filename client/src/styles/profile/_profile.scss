@@ -1,9 +1,6 @@
-@import 'styles/variables';
-@import 'styles/extends';
-@import 'styles/mixins';
-
 #auth-container {
-  max-width: 400px;
+  max-width: 95%;
+  width: auto;
   background-color: $canvas-color;
 
   .MuiTabs-flexContainer {

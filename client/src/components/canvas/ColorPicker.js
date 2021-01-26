@@ -5,7 +5,7 @@ import { CirclePicker } from 'react-color';
 export default ({ active, onChange }) => {
   return (
     <Fade in={active}>
-      <div id="color-picker-container">
+      <div id="color-picker-container" data-testid="canvas-brush-color-panel">
         <CirclePicker
           width="auto"
           circleSize={20}

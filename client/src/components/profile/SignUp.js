@@ -4,8 +4,11 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { signUp, selectUserStats } from './userSlice';
 
-const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
 const usernameRegex = /^[\w]{4,10}$/i;
+const PWD_MIN_LENGTH = 8;
+
+const trim = (str) => String(str).replace(/\s/g, '');
 
 export default (props) => {
   const [isPwdConfirmed, setIsPwdConfirmed] = useState(false);
@@ -18,7 +21,8 @@ export default (props) => {
   const dispatch = useDispatch();
   const stats = useSelector(selectUserStats);
 
-  const handleSignUp = (username, email, password) => {
+  const handleSignUp = (e) => {
+    e.preventDefault();
     dispatch(signUp({ username, email, password, stats }));
   };
 
@@ -30,7 +34,7 @@ export default (props) => {
     setIsVerified(
       usernameRegex.test(username) &&
         emailRegex.test(email) &&
-        password.length > 7 &&
+        password.length >= PWD_MIN_LENGTH &&
         password === passwordConf,
     );
   }, [username, email, password, passwordConf]);
@@ -41,7 +45,7 @@ export default (props) => {
       className="auth-form"
       noValidate
       autoComplete="off"
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={handleSignUp}
     >
       <TextField
         value={username}
@@ -50,7 +54,7 @@ export default (props) => {
         className="form-input"
         label="Username"
         helperText="4-10 characters"
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e) => setUsername(trim(e.target.value))}
       />
       <TextField
         value={email}
@@ -58,7 +62,7 @@ export default (props) => {
         id="auth-email"
         className="form-input"
         label="Email"
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setEmail(trim(e.target.value))}
       />
       <TextField
         value={password}
@@ -68,7 +72,7 @@ export default (props) => {
         className="form-input"
         type="password"
         helperText="8 characters minimum"
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => setPassword(trim(e.target.value))}
       />
       <TextField
         error={!!passwordConf.length && !isPwdConfirmed}
@@ -78,15 +82,10 @@ export default (props) => {
         className="form-input"
         type="password"
         helperText="Passwords should match"
-        onChange={(e) => setPasswordConf(e.target.value)}
+        onChange={(e) => setPasswordConf(trim(e.target.value))}
       />
-      <Button
-        type="submit"
-        className="auth-button"
-        disabled={!isVerified}
-        onClick={() => handleSignUp(username, email, password)}
-      >
-        Sign Up
+      <Button type="submit" className="auth-button" disabled={!isVerified}>
+        Submit
       </Button>
     </form>
   );

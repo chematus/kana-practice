@@ -27,7 +27,7 @@ export default ({ taskObj: { task, answer, abc }, getTask }) => {
         arrow
         classes={{ tooltip: 'controls-tooltip' }}
       >
-        <IconButton onClick={toggleModal}>
+        <IconButton onClick={toggleModal} data-testid="canvas-hint">
           <HelpOutlineRounded fontSize="large" />
         </IconButton>
       </Tooltip>
@@ -44,7 +44,7 @@ export default ({ taskObj: { task, answer, abc }, getTask }) => {
         arrow
         classes={{ tooltip: 'controls-tooltip' }}
       >
-        <IconButton onClick={handleTaskChange}>
+        <IconButton onClick={handleTaskChange} data-testid="canvas-task">
           <ReplayRounded fontSize="large" />
         </IconButton>
       </Tooltip>

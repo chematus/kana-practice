@@ -118,5 +118,5 @@ dist
 # local config
 src/store/config.*
 
-#custom
+# custom
 *.traineddata

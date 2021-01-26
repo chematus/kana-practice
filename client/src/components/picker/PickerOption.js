@@ -17,6 +17,7 @@ export default ({ selected, correct, handleClick, item }) => {
       <Button
         className={selected ? 'picker-option-selected' : ''}
         onClick={(e) => handleClick && handleClick(e, item)}
+        data-testid="picker-option"
       >
         {item}
       </Button>

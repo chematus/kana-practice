@@ -11,6 +11,8 @@ import {
   selectIsLoggedIn,
 } from 'components/profile/userSlice';
 
+const TRANSITION_TIMEOUT = 500;
+
 export default (props) => {
   const [task, setTask] = useState(null);
   const [answer, setAnswer] = useState(null);
@@ -32,7 +34,6 @@ export default (props) => {
   };
 
   const handleOptionClick = (e, selectedOption) => {
-    const TRANSITION_TIMEOUT = 500;
     try {
       setClicked(true);
       if (answer === selectedOption) {
@@ -67,7 +68,9 @@ export default (props) => {
       <div id="picker-performance">
         <PerformanceDisplay correct={correct} total={total} />
       </div>
-      <div id="picker-task">{task}</div>
+      <div id="picker-task" data-testid="picker-task">
+        {task}
+      </div>
       <div id="picker-desc">Pick correct transcription</div>
       <div id="picker-options-wrapper">
         {options.map((item, key) => (

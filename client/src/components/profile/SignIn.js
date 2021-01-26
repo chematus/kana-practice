@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 
 import { signIn } from './userSlice';
 
-const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
 
 export default (props) => {
   const [email, setEmail] = useState('');
@@ -14,7 +14,8 @@ export default (props) => {
 
   const dispatch = useDispatch();
 
-  const handleSignIn = (email, password) => {
+  const handleSignIn = (e) => {
+    e.preventDefault();
     dispatch(signIn({ email, password }));
   };
 
@@ -28,30 +29,25 @@ export default (props) => {
       className="auth-form"
       noValidate
       autoComplete="off"
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={handleSignIn}
     >
       <TextField
         id="auth-email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setEmail(String(e.target.value).replace(/\s/g, ''))}
         className="form-input"
         label="Email"
       />
       <TextField
         id="auth-password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => setPassword(String(e.target.value).replace(/\s/g, ''))}
         label="Password"
         className="form-input"
         type="password"
       />
-      <Button
-        type="submit"
-        disabled={!isVerified}
-        className="auth-button"
-        onClick={() => handleSignIn(email, password)}
-      >
-        Sign In
+      <Button type="submit" disabled={!isVerified} className="auth-button">
+        Submit
       </Button>
     </form>
   );

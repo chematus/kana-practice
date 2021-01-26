@@ -19,16 +19,21 @@ import {
   selectIsLoggedIn,
 } from 'components/profile/userSlice';
 
-const apiUrl = 'http://192.168.100.11:8000/ocr';
+const apiBaseUrl = process.env.API_URL || 'http://192.168.100.11:8000';
+const apiUrl = `${apiBaseUrl}/ocr`;
+
+const INITIAL_BRUSH_COLOR = '#555555';
+const INITIAL_BRUSH_SIZE = 8;
 
 export default (props) => {
   const canvasRef = useRef(null);
   const resImageRef = useRef(null);
 
-  const [color, setColor] = useState('#555555');
-  const [size, setSize] = useState(8);
+  const [color, setColor] = useState(INITIAL_BRUSH_COLOR);
+  const [size, setSize] = useState(INITIAL_BRUSH_SIZE);
   const [isPickerActive, setIsPickerActive] = useState(false);
   const [isRangeActive, setIsRangeActive] = useState(false);
+  // eslint-disable-next-line
   const [isCanvasActive, setIsCanvasActive] = useState(true);
   const [isCorrect, setIsCorrect] = useState(null);
   const [taskObj, setTaskObj] = useState({ task: '', answer: '', abc: '' });
@@ -75,7 +80,7 @@ export default (props) => {
       .getImageData(0, 0, el.width, el.height)
       .data.some((channel) => channel !== 0);
 
-    if (isBlank) {
+    if (isBlank || !resContext) {
       return false;
     }
 
@@ -173,9 +178,13 @@ export default (props) => {
         <div id="canvas-performance">
           <PerformanceDisplay total={total} />
         </div>
-        <CanvasTask taskObj={{ ...taskObj }} getTask={() => getTask()} />
+        <CanvasTask taskObj={{ ...taskObj }} getTask={getTask} />
 
-        <div id="canvas-container" className={isCanvasActive ? '' : 'disabled'}>
+        <div
+          id="canvas-container"
+          className={isCanvasActive ? '' : 'disabled'}
+          data-testid="canvas-main"
+        >
           <CanvasControls
             clear={clear}
             undo={undo}

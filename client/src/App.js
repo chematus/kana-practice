@@ -13,13 +13,16 @@ import logo from 'assets/logo.svg';
 import MessageToast from 'components/utils/MessageToast';
 import 'styles/App.scss';
 
-const Canvas = React.lazy(() => import('./components/canvas/Canvas'));
-const Matcher = React.lazy(() => import('./components/matcher/Matcher'));
-const Picker = React.lazy(() => import('./components/picker/Picker'));
-const HowTo = React.lazy(() => import('./components/HowTo'));
-const Home = React.lazy(() => import('./components/Home'));
-const Profile = React.lazy(() => import('./components/profile/Profile'));
-const ErrorPage = React.lazy(() => import('./components/ErrorPage'));
+const Canvas = React.lazy(() => import('components/canvas/Canvas'));
+const Matcher = React.lazy(() => import('components/matcher/Matcher'));
+const Picker = React.lazy(() => import('components/picker/Picker'));
+const HowTo = React.lazy(() => import('components/HowTo'));
+const Home = React.lazy(() => import('components/Home'));
+const Profile = React.lazy(() => import('components/profile/Profile'));
+const ErrorPage = React.lazy(() => import('components/ErrorPage'));
+
+const PRIMARY_THEME_COLOR = '#5e5e5e';
+const SECONDARY_THEME_COLOR = '#999';
 
 export default (props) => {
   const dispatch = useDispatch();
@@ -31,10 +34,10 @@ export default (props) => {
   const theme = createMuiTheme({
     palette: {
       primary: {
-        main: '#5e5e5e',
+        main: PRIMARY_THEME_COLOR,
       },
       secondary: {
-        main: '#999',
+        main: SECONDARY_THEME_COLOR,
       },
     },
   });

@@ -5,7 +5,7 @@ import Slider from '@material-ui/core/Slider';
 export default ({ active, onChange }) => {
   return (
     <Fade in={active}>
-      <div id="size-range-container">
+      <div id="size-range-container" data-testid="canvas-brush-size-panel">
         <Slider
           min={5}
           max={10}

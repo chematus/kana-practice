@@ -32,7 +32,11 @@ export default ({
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!isCanvasActive} onClick={undo}>
+          <IconButton
+            disabled={!isCanvasActive}
+            onClick={undo}
+            data-testid="canvas-undo"
+          >
             <UndoRounded fontSize="large" className="canvas-control" />
           </IconButton>
         </span>
@@ -45,7 +49,11 @@ export default ({
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!isCanvasActive} onClick={clear}>
+          <IconButton
+            disabled={!isCanvasActive}
+            onClick={clear}
+            data-testid="canvas-clear"
+          >
             <DeleteRounded fontSize="large" className="canvas-control" />
           </IconButton>
         </span>
@@ -58,7 +66,11 @@ export default ({
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!isCanvasActive} onClick={toggleRange}>
+          <IconButton
+            disabled={!isCanvasActive}
+            onClick={toggleRange}
+            data-testid="canvas-brush-size"
+          >
             <BrushRounded fontSize="large" className="canvas-control" />
             <SizeRange onChange={onSizeChange} active={isRangeActive} />
           </IconButton>
@@ -79,6 +91,7 @@ export default ({
               color,
               filter: `drop-shadow(0 0 2px ${color})`,
             }}
+            data-testid="canvas-brush-color"
           >
             <PaletteRounded fontSize="large" />
             <ColorPicker active={isPickerActive} onChange={onColorChange} />

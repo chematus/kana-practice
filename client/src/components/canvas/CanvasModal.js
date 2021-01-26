@@ -14,7 +14,7 @@ export default ({ active, toggleModal, abc, task }) => {
       onEscapeKeyDown={toggleModal}
     >
       <Fade in={active}>
-        <div className="modal">
+        <div className="modal" data-testid="canvas-hint-panel">
           <Card>
             <CardActionArea onClick={toggleModal}>
               <CardContent>

@@ -7,6 +7,8 @@ import PerformanceDisplay from 'components/utils/PerformanceDisplay';
 
 import { selectUserInfo, selectUserStats, userLoggedOut } from './userSlice';
 
+const STATS_MIN_COUNT = 5;
+
 const getWeakspotList = (stats, limit = 5) => {
   const { weakspot: data } = stats;
   const total = Object.entries(stats)
@@ -50,7 +52,7 @@ export default (props) => {
           onChange={handleTabChange}
         >
           {Object.keys(stats).map((key) => {
-            if (stats[key].total > 4) {
+            if (stats[key].total >= STATS_MIN_COUNT) {
               return <Tab label={key} className="profile-tab" key={key} />;
             }
             return false;
@@ -58,7 +60,8 @@ export default (props) => {
         </Tabs>
 
         <div className="profile-perf-info">
-          {Object.values(stats).some((item) => item.total > 4) || 'No data yet'}
+          {Object.values(stats).some((item) => item.total >= STATS_MIN_COUNT) ||
+            'No data yet'}
           <PerformanceDisplay
             correct={stats[Object.keys(stats)[tabActive]].correct}
             total={stats[Object.keys(stats)[tabActive]].total}

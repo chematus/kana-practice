@@ -1,7 +1,3 @@
-@import 'styles/variables';
-@import 'styles/extends';
-@import 'styles/mixins';
-
 @include keyframes(fade-in-and-out) {
   0% {
     opacity: 0;
