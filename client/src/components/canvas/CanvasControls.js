@@ -1,16 +1,27 @@
 import React from 'react';
-import { Fade, IconButton, Tooltip } from '@material-ui/core';
-import {
-  UndoRounded,
-  DeleteRounded,
-  PaletteRounded,
-  BrushRounded,
-  ErrorOutlineRounded,
-} from '@material-ui/icons';
+import Fade from '@material-ui/core/Fade';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import UndoRounded from '@material-ui/icons/UndoRounded';
+import DeleteRounded from '@material-ui/icons/DeleteRounded';
+import PaletteRounded from '@material-ui/icons/PaletteRounded';
+import BrushRounded from '@material-ui/icons/BrushRounded';
+import ErrorOutlineRounded from '@material-ui/icons/ErrorOutlineRounded';
 import ColorPicker from './ColorPicker';
 import SizeRange from './SizeRange';
 
-export default (props) => {
+export default ({
+  isCanvasActive,
+  undo,
+  clear,
+  togglePicker,
+  toggleRange,
+  isRangeActive,
+  color,
+  onColorChange,
+  isPickerActive,
+  onSizeChange,
+}) => {
   return (
     <div id="controls">
       <Tooltip
@@ -21,7 +32,11 @@ export default (props) => {
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!props.isCanvasActive} onClick={props.undo}>
+          <IconButton
+            disabled={!isCanvasActive}
+            onClick={undo}
+            data-testid="canvas-undo"
+          >
             <UndoRounded fontSize="large" className="canvas-control" />
           </IconButton>
         </span>
@@ -34,7 +49,11 @@ export default (props) => {
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <span>
-          <IconButton disabled={!props.isCanvasActive} onClick={props.clear}>
+          <IconButton
+            disabled={!isCanvasActive}
+            onClick={clear}
+            data-testid="canvas-clear"
+          >
             <DeleteRounded fontSize="large" className="canvas-control" />
           </IconButton>
         </span>
@@ -48,14 +67,12 @@ export default (props) => {
       >
         <span>
           <IconButton
-            disabled={!props.isCanvasActive}
-            onClick={props.toggleRange}
+            disabled={!isCanvasActive}
+            onClick={toggleRange}
+            data-testid="canvas-brush-size"
           >
             <BrushRounded fontSize="large" className="canvas-control" />
-            <SizeRange
-              onChange={props.onSizeChange}
-              active={props.isRangeActive}
-            />
+            <SizeRange onChange={onSizeChange} active={isRangeActive} />
           </IconButton>
         </span>
       </Tooltip>
@@ -68,18 +85,16 @@ export default (props) => {
       >
         <span>
           <IconButton
-            disabled={!props.isCanvasActive}
-            onClick={props.togglePicker}
+            disabled={!isCanvasActive}
+            onClick={togglePicker}
             style={{
-              color: props.color,
-              filter: `drop-shadow(0 0 2px ${props.color})`,
+              color,
+              filter: `drop-shadow(0 0 2px ${color})`,
             }}
+            data-testid="canvas-brush-color"
           >
             <PaletteRounded fontSize="large" />
-            <ColorPicker
-              active={props.isPickerActive}
-              onChange={props.onColorChange}
-            />
+            <ColorPicker active={isPickerActive} onChange={onColorChange} />
           </IconButton>
         </span>
       </Tooltip>
@@ -87,7 +102,8 @@ export default (props) => {
         title="The handwriting recognition system is not ideal, so if you encounter any errors feel free to skip the challenge."
         TransitionComponent={Fade}
         placement="left"
-        arrow
+        enterTouchDelay={0}
+        leaveTouchDelay={5000}
         classes={{ tooltip: 'controls-tooltip' }}
       >
         <IconButton id="canvas-disclaimer" disableFocusRipple disableRipple>

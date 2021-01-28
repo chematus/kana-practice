@@ -1,39 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import CanvasControls from './CanvasControls';
 import ReactCanvasDraw from 'react-canvas-draw';
-import { CircularProgress, Fade } from '@material-ui/core';
-import TaskGenerator from '../TaskGenerator';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
+import { getCanvasTask } from 'components/utils/TaskGenerator';
+import lzstring from 'lz-string';
 import CanvasTask from './CanvasTask';
 import HotkeyHandler from 'react-hot-keys';
-import CanvasOCR from './CanvasOCR';
-import ValidatorDisplay from '../ValidatorDisplay';
+import ValidatorDisplay from 'components/utils/ValidatorDisplay';
+import PerformanceDisplay from 'components/utils/PerformanceDisplay';
 
-class Canvas extends React.Component {
-  constructor(props) {
-    super(props);
+import {
+  canvasTaskCompleted,
+  selectCanvasStats,
+  exportStats,
+  selectIsLoggedIn,
+} from 'components/profile/userSlice';
 
-    this.getCanvasTask = TaskGenerator.getCanvasTask;
-    const task = this.getCanvasTask();
+const apiBaseUrl = process.env.API_URL || 'http://192.168.100.11:8000';
+const apiUrl = `${apiBaseUrl}/ocr`;
 
-    this.state = {
-      color: '#555555',
-      size: 5,
-      isPickerActive: false,
-      isRangeActive: false,
-      isCanvasActive: false,
-      correct: null,
-      ...task,
-    };
+const INITIAL_BRUSH_COLOR = '#555555';
+const INITIAL_BRUSH_SIZE = 8;
 
-    this.canvasRef = React.createRef();
-    this.resImageRef = React.createRef();
+export default (props) => {
+  const canvasRef = useRef(null);
+  const resImageRef = useRef(null);
 
-    //this.OCR = new CanvasOCR();
-  }
+  const [color, setColor] = useState(INITIAL_BRUSH_COLOR);
+  const [size, setSize] = useState(INITIAL_BRUSH_SIZE);
+  const [isPickerActive, setIsPickerActive] = useState(false);
+  const [isRangeActive, setIsRangeActive] = useState(false);
+  // eslint-disable-next-line
+  const [isCanvasActive, setIsCanvasActive] = useState(true);
+  const [isCorrect, setIsCorrect] = useState(null);
+  const [taskObj, setTaskObj] = useState({ task: '', answer: '', abc: '' });
 
-  canvasClear = () => {
+  const dispatch = useDispatch();
+  const { total } = useSelector(selectCanvasStats);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  const clear = () => {
     try {
-      this.canvasRef.current.clear();
+      canvasRef.current.clear();
     } catch (e) {
       console.error(e);
       return false;
@@ -41,9 +52,9 @@ class Canvas extends React.Component {
     return true;
   };
 
-  canvasUndo = () => {
+  const undo = () => {
     try {
-      this.canvasRef.current.undo();
+      canvasRef.current.undo();
     } catch (e) {
       console.error(e);
       return false;
@@ -51,161 +62,162 @@ class Canvas extends React.Component {
     return true;
   };
 
-  canvasTogglePicker = () => {
-    this.setState((prevState) => ({
-      isPickerActive: !prevState.isPickerActive,
-      isRangeActive: false,
-    }));
+  const togglePicker = () => {
+    setIsPickerActive((current) => !current);
+    setIsRangeActive(false);
   };
 
-  canvasToggleRange = () => {
-    this.setState((prevState) => ({
-      isRangeActive: !prevState.isRangeActive,
-      isPickerActive: false,
-    }));
+  const toggleRange = () => {
+    setIsRangeActive((current) => !current);
+    setIsPickerActive(false);
   };
 
-  canvasToggleActive = () => {
-    this.setState((prevState) => ({
-      isCanvasActive: !prevState.isCanvasActive,
-    }));
-  };
-
-  getImageFromCanvas = () => {
+  const getImageFromCanvas = () => {
     const el = document.getElementsByTagName('canvas')[1];
-    const resContext = this.resImageRef.current.getContext('2d');
+    const resContext = resImageRef.current.getContext('2d');
+    const isBlank = !el
+      .getContext('2d')
+      .getImageData(0, 0, el.width, el.height)
+      .data.some((channel) => channel !== 0);
+
+    if (isBlank || !resContext) {
+      return false;
+    }
+
     resContext.clearRect(
       0,
       0,
-      this.resImageRef.current.width,
-      this.resImageRef.current.height,
+      resImageRef.current.width,
+      resImageRef.current.height,
     );
     resContext.drawImage(
       el,
       0,
       0,
-      this.resImageRef.current.width,
-      this.resImageRef.current.height,
+      resImageRef.current.width,
+      resImageRef.current.height,
     );
-    return this.resImageRef.current.toDataURL('image/png');
+    const result = lzstring.compress(resImageRef.current.toDataURL());
+    return result;
   };
 
-  canvasHandleChange = () => {
-    this.setState({
-      isPickerActive: false,
-      isRangeActive: false,
-      correct: null,
-    });
-    this.OCR.parseImg(this.getImageFromCanvas())
-      /** dev data start */
-      .then((data) => {
-        console.log(
-          `Input: ${data.trim()} 
-          Task: ${this.state.answer}
-          Check 1: ${data.trim() === this.state.answer}`,
-        );
-        return data;
+  const handleChange = (e) => {
+    setIsPickerActive(false);
+    setIsRangeActive(false);
+    setIsCorrect(null);
+    const imgBase64 = getImageFromCanvas();
+    if (!imgBase64) {
+      return false;
+    }
+    axios
+      .post(apiUrl, { img: imgBase64 })
+      .then(({ data: { text } }) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.log(
+            `Input: ${text} 
+            Task: ${taskObj.answer}`,
+          );
+        }
+        return text;
       })
-      /** dev data end */
       .then((data) => {
-        if (this.state.answer === data.trim()) {
-          this.setState({ correct: true });
-          return this.getTask(this.state.answer);
+        if (taskObj.answer === data.trim()) {
+          dispatch(canvasTaskCompleted());
+          setIsCorrect(true);
+          getTask(taskObj.answer);
+        }
+      })
+      .catch((e) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error(e);
         }
       });
   };
 
-  getTask = (current) => {
-    const task = this.getCanvasTask(current);
-    this.canvasClear();
-    this.setState({ ...task });
-    return task;
+  const getTask = (current) => {
+    const task = getCanvasTask(current);
+    clear();
+    setTaskObj(task);
   };
 
-  onColorChange = (colorObj) => {
-    this.setState({ color: colorObj.hex });
+  const onColorChange = (colorObj) => {
+    setColor(colorObj.hex);
   };
 
-  onSizeChange = (e, size) => {
-    this.setState({ size });
+  const onSizeChange = (e, size) => {
+    setSize(size);
   };
 
-  onKeyDown = (keyName, e, handle) => {
-    if (!this.isCanvasActive) {
+  const onKeyDown = (keyName, e, handle) => {
+    if (!isCanvasActive) {
       return false;
     }
     switch (keyName) {
       case 'z':
-        return this.canvasUndo();
+        return undo();
       case 'x':
-        return this.canvasClear();
+        return clear();
       case 'c':
-        return this.canvasToggleRange();
+        return toggleRange();
       case 'v':
-        return this.canvasTogglePicker();
+        return togglePicker();
       default:
         return false;
     }
   };
 
-  componentDidMount() {
-    //this.OCR.prepareWorker().then(() => this.canvasToggleActive());
-  }
+  useEffect(() => {
+    getTask();
+    return () => isLoggedIn && dispatch(exportStats());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentWillUnmount() {
-    //this.OCR.terminateWorker();
-  }
-
-  render() {
-    return (
-      <HotkeyHandler keyName="z, x, c, v" onKeyDown={this.onKeyDown}>
-        <div id="canvas-task">
-          <CanvasTask
-            task={this.state.task}
-            abc={this.state.abc}
-            answer={this.state.answer}
-            getTask={this.getTask}
-          />
-
-          <div
-            id="canvas-container"
-            className={this.state.isCanvasActive ? '' : 'disabled'}
-          >
-            <CanvasControls
-              clear={this.canvasClear}
-              undo={this.canvasUndo}
-              togglePicker={this.canvasTogglePicker}
-              toggleRange={this.canvasToggleRange}
-              onColorChange={this.onColorChange}
-              onSizeChange={this.onSizeChange}
-              color={this.state.color}
-              isCanvasActive={this.state.isCanvasActive}
-              isPickerActive={this.state.isPickerActive}
-              isRangeActive={this.state.isRangeActive}
-            />
-            <ReactCanvasDraw
-              id="canvas-main"
-              hideGrid
-              disabled={!this.state.isCanvasActive}
-              lazyRadius={1}
-              brushColor={this.state.color}
-              brushRadius={this.state.size}
-              catenaryColor={this.state.color}
-              ref={this.canvasRef}
-              onChange={this.canvasHandleChange}
-            />
-            <div id="canvas-validator">
-              <ValidatorDisplay correct={this.state.correct} />
-            </div>
-            <Fade in={!this.state.isCanvasActive}>
-              <CircularProgress className="circular-loader" />
-            </Fade>
-            <canvas id="copy" ref={this.resImageRef} />
-          </div>
+  return (
+    <HotkeyHandler keyName="z, x, c, v" onKeyDown={onKeyDown}>
+      <div id="canvas-task">
+        <div id="canvas-performance">
+          <PerformanceDisplay total={total} />
         </div>
-      </HotkeyHandler>
-    );
-  }
-}
+        <CanvasTask taskObj={{ ...taskObj }} getTask={getTask} />
 
-export default Canvas;
+        <div
+          id="canvas-container"
+          className={isCanvasActive ? '' : 'disabled'}
+          data-testid="canvas-main"
+        >
+          <CanvasControls
+            clear={clear}
+            undo={undo}
+            togglePicker={togglePicker}
+            toggleRange={toggleRange}
+            onColorChange={onColorChange}
+            onSizeChange={onSizeChange}
+            color={color}
+            isCanvasActive={isCanvasActive}
+            isPickerActive={isPickerActive}
+            isRangeActive={isRangeActive}
+          />
+          <ReactCanvasDraw
+            id="canvas-main"
+            hideGrid
+            disabled={!isCanvasActive}
+            lazyRadius={1}
+            brushColor={color}
+            brushRadius={size}
+            catenaryColor={color}
+            hideInterface={true}
+            ref={canvasRef}
+            onChange={handleChange}
+          />
+          <div id="canvas-validator">
+            <ValidatorDisplay correct={isCorrect} />
+          </div>
+          <Fade in={!isCanvasActive}>
+            <CircularProgress className="circular-loader" />
+          </Fade>
+          <canvas id="copy" ref={resImageRef} />
+        </div>
+      </div>
+    </HotkeyHandler>
+  );
+};

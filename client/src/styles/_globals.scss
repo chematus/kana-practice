@@ -1,0 +1,224 @@
+@import 'variables';
+@import 'extends';
+@import 'mixins';
+
+@font-face {
+  font-family: 'Antic Slab';
+  src: url('/font/AnticSlab-Regular.ttf') format('truetype');
+}
+
+:root {
+  font-family: 'Antic Slab', serif;
+  font-size: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  position: relative;
+}
+
+body {
+  height: 100vh;
+  background-color: $background-color;
+
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+header {
+  color: $text-color;
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  position: fixed;
+  z-index: 100;
+  height: 50px;
+  background: linear-gradient(135deg, $base-color-start, $base-color-end);
+  box-shadow: 0px 1px 10px 0px $shadow-color;
+}
+
+#logo-link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-left: 30px;
+  padding: 0 10px;
+}
+
+@media screen and (max-width: 780px) {
+  #logo-link {
+    margin-left: 10px;
+  }
+}
+
+#logo {
+  height: 90%;
+  width: auto;
+  transition: all ease 300ms;
+  color: $text-color;
+  filter: drop-shadow(0 0 2px $shadow-color);
+
+  &:hover {
+    transform: scale(1.1);
+    color: $text-focus-color;
+    filter: none;
+  }
+}
+
+nav {
+  display: flex;
+  align-self: flex-end;
+  height: 100%;
+  align-items: center;
+  font-size: 2rem;
+  padding-right: 10px;
+
+  ul {
+    list-style: none;
+    height: 100%;
+
+    li {
+      display: inline-flex;
+      height: 100%;
+    }
+  }
+
+  .MuiIconButton-root {
+    padding: 10px !important;
+    @extend %shadowed-icon-button;
+  }
+
+  .menu-container-mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 780px) {
+    .menu-container-mobile {
+      display: block;
+    }
+
+    .menu-container {
+      display: none;
+    }
+  }
+
+  .MuiIconButton-label svg {
+    padding: 0;
+    font-size: 3rem;
+  }
+}
+
+.nav-link {
+  @extend %shadowed-button;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px !important;
+  letter-spacing: 1px;
+  font-weight: 100;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+
+  &.active {
+    font-weight: 800;
+    color: $text-active-color;
+    text-shadow: 1px 1px 10px $text-active-shadow-color;
+
+    &:hover {
+      color: $text-color;
+      text-shadow: 1px 1px $focus-shadow-color;
+    }
+  }
+}
+
+.nav-menu {
+  .MuiList-root {
+    background: linear-gradient(135deg, $background-color, $base-color-end);
+    padding: 0;
+  }
+
+  .MuiPaper-root {
+    border-radius: 0;
+    top: 0;
+  }
+
+  .MuiButtonBase-root {
+    font-size: 2rem;
+    letter-spacing: 1px;
+    height: 50px;
+    padding: 0 20px;
+    font-family: inherit;
+    @extend %shadowed-button;
+  }
+}
+
+footer {
+  width: 100%;
+  height: 50px;
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    $base-color-end,
+    $base-color-end 40%,
+    $base-color-start
+  );
+  font-size: 1.5rem;
+  @extend %shadowed-text;
+  box-shadow: 0px 1px 10px 0px $shadow-color;
+
+  @include text-select(none);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100%;
+  height: auto;
+}
+
+main {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 0;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 780px) {
+  main {
+    height: fit-content;
+    min-height: 100vh;
+  }
+}
+
+.switch-transition-wrapper {
+  position: relative;
+  width: -webkit-fill-available;
+
+  & > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+  }
+}

@@ -1,0 +1,187 @@
+#canvas-task {
+  max-width: 400px;
+}
+
+#canvas-container {
+  box-shadow: 0 0 10px $shadow-color;
+}
+
+#canvas-main {
+  width: 400px;
+  height: 400px;
+  background-color: $canvas-color;
+}
+
+#canvas-container {
+  position: relative;
+
+  &.disabled {
+    canvas {
+      background-color: $background-color;
+    }
+  }
+}
+
+#controls {
+  height: -webkit-fill-available;
+  position: absolute;
+  z-index: 50;
+  right: 0;
+  top: 0;
+  margin: 5px 5px 5px 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+
+  button {
+    svg {
+      transition: all ease 300ms;
+    }
+    svg.canvas-control {
+      color: $text-color;
+      filter: drop-shadow(0 0 2px $shadow-color);
+    }
+    &:hover {
+      filter: none !important;
+
+      svg.canvas-control {
+        color: $text-focus-color;
+        filter: drop-shadow(1px 1px $focus-shadow-color);
+      }
+    }
+  }
+
+  span {
+    pointer-events: all;
+  }
+}
+
+.canvas-control .MuiSlider-root.MuiSlider-vertical {
+  padding: 0 !important;
+}
+
+.circle-picker {
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#canvas-disclaimer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+#color-picker-container {
+  position: absolute !important;
+  right: 0;
+  left: 0;
+  margin: auto;
+  top: 40px;
+  z-index: 100;
+  background-color: $background-color;
+  width: 30px;
+  padding: 7px 0;
+  box-shadow: 0 0 5px $shadow-color;
+  border-radius: 15px;
+}
+
+#size-range-container {
+  width: 30px;
+  height: 100px;
+  position: absolute;
+  z-index: 100;
+  background-color: #fff;
+  box-shadow: 0 0 5px $shadow-color;
+  border-radius: 15px;
+  padding: 10px 0;
+  top: 40px;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
+
+#copy {
+  visibility: hidden;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 50px;
+}
+
+.circular-loader {
+  position: absolute;
+  z-index: 150;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+}
+
+#task-container {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @extend %shadowed-text;
+
+  #task-message {
+    text-align: center;
+    font-size: 2.9rem;
+  }
+
+  button {
+    @extend %shadowed-icon-button;
+  }
+}
+
+.controls-tooltip {
+  font-size: 1.2rem !important;
+  text-shadow: 0 0 1px $canvas-color;
+  text-align: center;
+
+  li {
+    text-align: left;
+    padding-left: 5px;
+  }
+}
+
+.modal {
+  height: auto;
+  width: 250px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 150;
+  outline: 0;
+
+  .modal-media {
+    width: auto;
+    height: 200px;
+    margin: -20px 0;
+  }
+}
+
+#canvas-validator {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 100;
+}
+
+#canvas-performance {
+  margin-bottom: 12px;
+  min-height: 2.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 0;
+  @include text-select(none);
+
+  span {
+    font-size: 2rem;
+    font-family: inherit;
+    @extend %shadowed-text;
+  }
+}

@@ -1,0 +1,44 @@
+%shadowed-text {
+  color: $text-color;
+  text-shadow: 0 0 5px $shadow-color;
+}
+
+%shadowed-button {
+  color: $text-color;
+  text-shadow: 0 0 5px $shadow-color;
+  transition: all ease 300ms;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: $text-focus-color;
+      text-shadow: 1px 1px $focus-shadow-color;
+    }
+  }
+}
+
+%shadowed-icon-button {
+  svg {
+    transition: all ease 300ms;
+    color: $text-color;
+    filter: drop-shadow(0 0 2px $shadow-color);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      filter: none !important;
+
+      svg {
+        color: $text-focus-color;
+        filter: drop-shadow(1px 1px $focus-shadow-color);
+      }
+    }
+  }
+}
+
+%shadowed-icon {
+  svg {
+    transition: all ease 300ms;
+    color: $text-color;
+    filter: drop-shadow(0 0 2px $shadow-color);
+  }
+}

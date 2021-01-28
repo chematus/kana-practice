@@ -1,0 +1,76 @@
+#howto-container {
+  height: 100%;
+  width: 100%;
+  @extend %shadowed-text;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  section {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
+
+#challenge-header-section {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 780px) {
+  section#challenge-header-section {
+    height: auto;
+    padding: 10px 0 0;
+  }
+
+  section#challenge-options-section {
+    flex-direction: column;
+    padding-bottom: 50px;
+
+    .challenge-button {
+      width: 100%;
+      padding: 10px 20px;
+    }
+
+    h2 {
+      margin: 0 auto 5px;
+    }
+  }
+}
+
+#challenge-options-section {
+  align-items: flex-start;
+}
+
+a.challenge-button {
+  @extend %shadowed-button;
+  width: 200px;
+  text-transform: initial;
+  font-family: inherit;
+}
+
+.challenge-container {
+  text-align: center;
+  padding: 7px;
+}
+
+.challenge-ico svg {
+  font-size: 5rem;
+  filter: drop-shadow(0 0 2px $shadow-color);
+}
+
+.challenge-description {
+  font-size: 1.7rem;
+  width: fit-content;
+}

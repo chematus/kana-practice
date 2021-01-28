@@ -1,24 +1,25 @@
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import React from 'react';
-import ValidatorDisplay from '../ValidatorDisplay';
+import ValidatorDisplay from 'components/utils/ValidatorDisplay';
 
-export default (props) => {
-  let correct = null;
-  if (props.selected) {
-    if (props.correct) {
-      correct = true;
+export default ({ selected, correct, handleClick, item }) => {
+  let isCorrect = null;
+  if (selected) {
+    if (correct) {
+      isCorrect = true;
     } else {
-      correct = false;
+      isCorrect = false;
     }
   }
   return (
     <div className="picker-option">
-      <ValidatorDisplay correct={correct} />
+      <ValidatorDisplay correct={isCorrect} />
       <Button
-        className={props.selected ? 'picker-option-selected' : ''}
-        onClick={(e) => props.handleClick && props.handleClick(e, props.item)}
+        className={selected ? 'picker-option-selected' : ''}
+        onClick={(e) => handleClick && handleClick(e, item)}
+        data-testid="picker-option"
       >
-        {props.item}
+        {item}
       </Button>
     </div>
   );

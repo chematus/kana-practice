@@ -1,0 +1,90 @@
+#home-button {
+  font-size: 2rem;
+  padding: 10px;
+  @extend %shadowed-button;
+  font-family: inherit;
+}
+
+.MuiAlert-message {
+  font-size: 1.5rem;
+}
+
+#home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  @extend %shadowed-text;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 5px;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  section {
+    display: flex;
+  }
+}
+
+#home-header-section {
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 40vh;
+}
+
+@media screen and (max-width: 780px) {
+  #home-header-section {
+    height: auto;
+    padding: 50px 0;
+  }
+
+  section#home-feature-section {
+    flex-direction: column;
+  }
+
+  div.feature-container {
+    display: block;
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 0 20px;
+
+    h2 {
+      margin: 0 auto 10px;
+    }
+  }
+}
+
+#home-feature-section {
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.subheading {
+  font-size: 1.5rem;
+}
+
+.feature-container {
+  text-align: center;
+  margin: 0 20px;
+  font-size: 1.7rem;
+  max-width: 200px;
+}
+
+.feature-ico svg {
+  font-size: 5rem;
+  filter: drop-shadow(0 0 2px $shadow-color);
+}
+
+#feature-button {
+  @extend %shadowed-button;
+  width: fit-content;
+  padding: 10px;
+  font-size: 2rem;
+  font-family: inherit;
+  margin: 20px auto;
+}

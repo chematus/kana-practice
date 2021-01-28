@@ -1,82 +1,78 @@
-import React from 'react';
-import { ButtonBase, Menu, MenuItem } from '@material-ui/core';
+import React, { useState } from 'react';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
+import { IconButton } from '@material-ui/core';
 
-class NavElement extends React.Component {
-  constructor(props) {
-    super(props);
+export default ({ main, aria, subitems }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    this.state = {
-      isOpen: false,
-    };
-    this.ref = null;
-  }
+  const handleOpen = (e) => {
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
+  };
 
-  showMenu(active = false) {
-    this.setState({
-      isOpen: active,
-    });
-    return active;
-  }
+  const isActive = (match, location, list = null) => {
+    if (list) {
+      return list.some((item) => item.url === location.pathname);
+    }
+    return match?.url === location.pathname;
+  };
 
-  isActive(match, location) {
-    return this.props.subitems.some((item) => item.link === match.url);
-  }
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  render() {
-    let submenu = null;
-    let customProps = {};
-    if (this.props.subitems && this.props.subitems.length) {
-      customProps.isActive = (match, location) =>
-        this.isActive(match, location);
-      submenu = (
+  const getSubmenu = () => {
+    return (
+      subitems?.length && (
         <Menu
-          id={this.props.aria}
-          open={this.state.isOpen}
-          anchorEl={this.ref}
+          id={aria}
+          open={!!anchorEl}
+          anchorEl={anchorEl}
           className="nav-menu"
-          onClose={() => this.showMenu(false)}
+          onClose={handleClose}
         >
-          {this.props.subitems.map((item, key) => (
+          {subitems.map(({ url = '#', name }, key) => (
             <MenuItem
               component={NavLink}
               key={key}
               className="nav-link"
               activeClassName="nav-link active"
-              onClick={() => this.showMenu(false)}
-              to={
-                this.props.extended
-                  ? this.props.main.link + item.link
-                  : item.link
-              }
+              onClick={handleClose}
+              to={url}
+              exact
+              isActive={isActive}
             >
-              {item.name}
+              {name}
             </MenuItem>
           ))}
         </Menu>
-      );
-    }
-
-    return (
-      <>
-        <ButtonBase
-          aria-controls={this.props.aria}
-          aria-haspopup="true"
-          className="nav-link"
-          focusRipple={true}
-          exact
-          onClick={() => this.showMenu(true)}
-          ref={(item) => (this.ref = item)}
-          component={NavLink}
-          to={this.props.main.link || '#'}
-          {...customProps}
-        >
-          {this.props.main.name}
-        </ButtonBase>
-        {submenu}
-      </>
+      )
     );
-  }
-}
+  };
 
-export default NavElement;
+  const params = {
+    'aria-controls': aria,
+    'aria-haspopup': true,
+    className: 'nav-link',
+    focusRipple: true,
+    exact: true,
+    onClick: subitems && handleOpen,
+    component: NavLink,
+    to: main.url || '',
+    isActive: (match, location) => isActive(match, location, subitems),
+  };
+
+  return (
+    <>
+      {main.name ? (
+        <ButtonBase {...params}>{main.name}</ButtonBase>
+      ) : (
+        <IconButton {...params}>{main.icon}</IconButton>
+      )}
+      {getSubmenu()}
+    </>
+  );
+};

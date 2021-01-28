@@ -1,70 +1,88 @@
-import React from 'react';
-import PerformanceDisplay from '../PerformanceDisplay';
-import TaskGenerator from '../TaskGenerator';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import PerformanceDisplay from 'components/utils/PerformanceDisplay';
+import { getPickerTask, getKana } from 'components/utils/TaskGenerator';
 import PickerOption from './PickerOption';
 
-class Picker extends React.Component {
-  constructor(props) {
-    super(props);
+import {
+  pickerTaskCompleted,
+  selectPickerStats,
+  exportStats,
+  selectIsLoggedIn,
+} from 'components/profile/userSlice';
 
-    this.getPickerTask = TaskGenerator.getPickerTask;
-    const task = this.getPickerTask();
+const TRANSITION_TIMEOUT = 500;
 
-    this.state = {
-      ...task,
-      total: 0,
-      correct: 0,
-      clicked: false,
-      selectedOption: '',
-    };
-  }
+export default (props) => {
+  const [task, setTask] = useState(null);
+  const [answer, setAnswer] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [clicked, setClicked] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('');
 
-  handleOptionClick = (e, selectedOption) => {
-    const TRANSITION_TIMEOUT = 500;
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const { correct, total } = useSelector(selectPickerStats);
+
+  const getTask = (current) => {
+    const pickerTask = getPickerTask(current);
+    setClicked(false);
+    setTask(pickerTask.task);
+    setAnswer(pickerTask.answer);
+    setOptions(pickerTask.options);
+    return task;
+  };
+
+  const handleOptionClick = (e, selectedOption) => {
     try {
-      const result = { total: this.state.total + 1, clicked: true };
-      if (this.state.answer === selectedOption) {
-        result.correct = this.state.correct + 1;
+      setClicked(true);
+      if (answer === selectedOption) {
+        dispatch(pickerTaskCompleted({ isCorrect: true }));
+      } else {
+        dispatch(
+          pickerTaskCompleted({
+            isCorrect: false,
+            kana: getKana(answer, task),
+          }),
+        );
       }
-      this.setState({ ...result, selectedOption });
+      setSelectedOption(selectedOption);
 
-      setTimeout(() => this.getTask(this.state.answer), TRANSITION_TIMEOUT);
+      setTimeout(() => {
+        setSelectedOption('');
+        return getTask(answer);
+      }, TRANSITION_TIMEOUT);
     } catch (e) {
       console.error(e);
     }
   };
 
-  getTask = (current) => {
-    const task = this.getPickerTask(current);
-    this.setState({ clicked: false, ...task });
-    return task;
-  };
+  useEffect(() => {
+    getTask();
+    return () => isLoggedIn && dispatch(exportStats());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  render() {
-    return (
-      <div id="picker-container">
-        <div id="picker-performance">
-          <PerformanceDisplay
-            correct={this.state.correct}
-            total={this.state.total}
-          />
-        </div>
-        <div id="picker-task">{this.state.task}</div>
-        <div id="picker-desc">Pick correct transcription</div>
-        <div id="picker-options-wrapper">
-          {this.state.options.map((item, key) => (
-            <PickerOption
-              key={key}
-              item={item}
-              selected={this.state.selectedOption === item}
-              correct={this.state.answer === item}
-              handleClick={!this.state.clicked && this.handleOptionClick}
-            />
-          ))}
-        </div>
+  return (
+    <div id="picker-container">
+      <div id="picker-performance">
+        <PerformanceDisplay correct={correct} total={total} />
       </div>
-    );
-  }
-}
-
-export default Picker;
+      <div id="picker-task" data-testid="picker-task">
+        {task}
+      </div>
+      <div id="picker-desc">Pick correct transcription</div>
+      <div id="picker-options-wrapper">
+        {options.map((item, key) => (
+          <PickerOption
+            key={key}
+            item={item}
+            selected={selectedOption === item}
+            correct={answer === item}
+            handleClick={!clicked && handleOptionClick}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};

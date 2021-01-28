@@ -4,15 +4,42 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node -r dotenv/config -r esm ./src/server.js",
+    "dev": "nodemon -r esm ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "chematus",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "@sentry/node": "^6.0.2",
+    "@sentry/tracing": "^6.0.2",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.1",
+    "lz-string": "^1.4.4",
+    "mongoose": "^5.10.11",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "tesseract.js": "^2.1.4",
+    "winston": "^3.3.3",
+    "winston-sentry-log": "^1.0.19"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.6",
+    "@babel/preset-env": "^7.12.1",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.0.0",
     "nodemon": "^2.0.6"
   }
 }

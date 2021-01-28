@@ -1,15 +1,16 @@
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import React from 'react';
 
-export default (props) => {
+export default ({ id, active, disabled, column, char, handleClick }) => {
   return (
     <Button
-      id={props.id}
-      className={props.active ? 'matcher-option-active' : ''}
-      disabled={props.disabled}
-      onClick={(e) => props.handleClick(props.column, props.char, e)}
+      id={id}
+      className={active ? 'matcher-option-active' : ''}
+      disabled={disabled}
+      onClick={(e) => handleClick(column, char, e)}
+      data-testid={`matcher-option-${column}`}
     >
-      {props.char}
+      {char}
     </Button>
   );
 };

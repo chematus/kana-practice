@@ -1,10 +1,11 @@
 import React from 'react';
-import { Fade, Slider } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
+import Slider from '@material-ui/core/Slider';
 
-export default (props) => {
+export default ({ active, onChange }) => {
   return (
-    <Fade in={props.active}>
-      <div id="size-range-container">
+    <Fade in={active}>
+      <div id="size-range-container" data-testid="canvas-brush-size-panel">
         <Slider
           min={5}
           max={10}
@@ -12,7 +13,7 @@ export default (props) => {
           orientation="vertical"
           defaultValue={5}
           valueLabelDisplay="off"
-          onChangeCommitted={props.onChange}
+          onChangeCommitted={onChange}
         />
       </div>
     </Fade>

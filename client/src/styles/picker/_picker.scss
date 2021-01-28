@@ -1,0 +1,67 @@
+#picker-container {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: inherit;
+  font-size: 2rem;
+}
+
+#picker-task {
+  font-size: 4rem;
+  min-height: 70px;
+  @extend %shadowed-text;
+}
+
+#picker-options-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.picker-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .MuiButton-label {
+    font-size: 3rem;
+    text-transform: lowercase;
+  }
+  .MuiButton-root {
+    font-family: inherit;
+    @extend %shadowed-button;
+  }
+
+  .picker-option-selected {
+    opacity: 0;
+  }
+
+  .validator-display {
+    position: absolute;
+  }
+}
+
+#picker-desc {
+  text-align: justify;
+  margin: 20px 0;
+  @extend %shadowed-text;
+}
+
+#picker-performance {
+  margin-bottom: 20px;
+  min-height: 2.5rem;
+  position: relative;
+  z-index: 0;
+  @extend %shadowed-text;
+  @include text-select(none);
+
+  sup {
+    font-size: 1.5rem;
+    font-weight: 800;
+    position: absolute;
+    top: -3px;
+    right: -7px;
+  }
+}

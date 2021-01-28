@@ -1,0 +1,36 @@
+@include keyframes(fade-in-and-out) {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.validator-display {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+
+  .validator-correct,
+  .validator-wrong {
+    position: absolute;
+    transition: opacity ease 300ms;
+
+    @extend %shadowed-icon;
+
+    .validator-icon {
+      font-size: 5rem;
+      opacity: 0;
+    }
+
+    .active {
+      @include animation(1s, fade-in-and-out, 1);
+    }
+  }
+}

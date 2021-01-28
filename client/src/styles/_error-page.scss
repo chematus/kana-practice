@@ -1,0 +1,20 @@
+#not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#not-found-svg {
+  font-size: 3.5rem;
+  margin-right: 10px;
+}
+
+#error-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  @extend %shadowed-text;
+  @extend %shadowed-icon;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,60 @@
+#matcher-container {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: inherit;
+  font-size: 2rem;
+}
+
+#matcher-options-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+
+  .matcher-option-active {
+    box-shadow: 0 0 5px $shadow-color inset;
+  }
+
+  .MuiButton-root.Mui-disabled {
+    color: $base-color-end;
+    text-shadow: 0 0 5px $focus-shadow-color;
+  }
+}
+
+#matcher-options-left,
+#matcher-options-right {
+  display: flex;
+  flex-direction: column;
+
+  .MuiButton-root {
+    font-family: inherit;
+    font-size: 3rem;
+    text-transform: lowercase;
+    @extend %shadowed-button;
+  }
+}
+
+#matcher-task {
+  @extend %shadowed-text;
+}
+
+#matcher-performance {
+  margin-bottom: 20px;
+  min-height: 2.5rem;
+  position: relative;
+  z-index: 0;
+  @extend %shadowed-text;
+  @include text-select(none);
+
+  sup {
+    font-size: 1.5rem;
+    font-weight: 800;
+    position: absolute;
+    top: -3px;
+    right: -7px;
+  }
+}
