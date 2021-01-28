@@ -38,8 +38,6 @@ const logger = createLogger({
   ],
 });
 
-logger.info('test');
-
 const userController = express.Router();
 
 const { secret, expiresIn } = config.passport;

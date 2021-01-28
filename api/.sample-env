@@ -1,0 +1,6 @@
+PASSPORT_SECRET=
+SALT=
+MONGO_URI=
+SENTRY_DSN=
+
+        
