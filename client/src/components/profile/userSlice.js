@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const apiBaseUrl = process.env.API_URL || 'http://192.168.100.11:8000/user';
+const apiBaseUrl = process.env.API_URL || 'https://kanapractice-api.tk/user';
 const apiEndpoints = {
   signIn: `${apiBaseUrl}/signin`,
   signUp: `${apiBaseUrl}/signup`,
