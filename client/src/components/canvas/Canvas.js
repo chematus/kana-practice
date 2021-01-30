@@ -19,7 +19,7 @@ import {
   selectIsLoggedIn,
 } from 'components/profile/userSlice';
 
-const apiBaseUrl = process.env.API_URL || 'http://192.168.100.11:8000';
+const apiBaseUrl = process.env.API_URL || 'https://kanapractice-api.tk';
 const apiUrl = `${apiBaseUrl}/ocr`;
 
 const INITIAL_BRUSH_COLOR = '#555555';
