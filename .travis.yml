@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - 13
+cache:
+  directories:
+    - 'node_modules'
+matrix:
+  - env: ECMAScript
+    before_script:
+      - cd ${TRAVIS_BUILD_DIR}/api
+    script:
+      - npm ci
+
+  - env: ECMAScript
+    before_script:
+      - cd ${TRAVIS_BUILD_DIR}/client
+    script:
+      - npm ci
+      - npm test
+on:
+  branch: master
