@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const DEFAULT_ERROR_MESSAGE = 'Something went wrong';
+
 const apiBaseUrl = process.env.API_URL || 'https://kanapractice-api.tk/user';
 const apiEndpoints = {
   signIn: `${apiBaseUrl}/signin`,
@@ -149,7 +151,7 @@ const userSlice = createSlice({
     },
     [signUp.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error = action.payload?.errMsg || 'Something went wrong';
+      state.error = action.payload?.errMsg || DEFAULT_ERROR_MESSAGE;
     },
     [signIn.pending]: (state, action) => {
       state.status = 'processing';
@@ -184,11 +186,11 @@ const userSlice = createSlice({
     },
     [signIn.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error = action.payload?.errMsg || 'Something went wrong';
+      state.error = action.payload?.errMsg || DEFAULT_ERROR_MESSAGE;
     },
     [exportStats.rejected]: (state, action) => {
       state.status = 'failed';
-      state.error = action?.error || 'Something went wrong';
+      state.error = action?.error || DEFAULT_ERROR_MESSAGE;
     },
     [autoSignIn.pending]: (state, action) => {
       state.status = 'processing';

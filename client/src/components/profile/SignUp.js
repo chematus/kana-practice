@@ -66,7 +66,7 @@ export default (props) => {
       />
       <TextField
         value={password}
-        error={!!password.length && password.length < 8}
+        error={!!password.length && password.length < PWD_MIN_LENGTH}
         id="auth-password"
         label="Password"
         className="form-input"
