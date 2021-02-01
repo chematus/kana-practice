@@ -8,6 +8,8 @@ import {
   flushError,
 } from 'components/profile/userSlice';
 
+const TOAST_DURATION = 3000;
+
 export default (props) => {
   const [isActive, setIsActive] = useState(false);
 
@@ -27,7 +29,11 @@ export default (props) => {
   }, [error, status]);
 
   return (
-    <Snackbar open={isActive} autoHideDuration={3000} onClose={handleClose}>
+    <Snackbar
+      open={isActive}
+      autoHideDuration={TOAST_DURATION}
+      onClose={handleClose}
+    >
       <Alert onClose={handleClose} severity="error">
         {error}
       </Alert>

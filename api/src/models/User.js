@@ -33,7 +33,7 @@ const UserSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-UserSchema.methods.verifyPassword = function (pwd) {
+UserSchema.methods.verifyPassword = (pwd) => {
   return bcrypt.compare(pwd, this.hashedPassword);
 };
 
