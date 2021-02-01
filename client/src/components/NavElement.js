@@ -62,7 +62,7 @@ export default ({ main, aria, subitems }) => {
     onClick: subitems && handleOpen,
     component: NavLink,
     to: main.url || '',
-    isActive: () => isActive(match, location, subitems),
+    isActive: (match, location) => isActive(match, location, subitems),
   };
 
   return (
