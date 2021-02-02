@@ -145,8 +145,8 @@ export default () => {
     setColor(colorObj.hex);
   };
 
-  const onSizeChange = () => {
-    setSize(size);
+  const onSizeChange = (e, newSize) => {
+    setSize(newSize);
   };
 
   const onKeyDown = (keyName) => {

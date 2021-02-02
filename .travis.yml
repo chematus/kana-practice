@@ -9,15 +9,15 @@ matrix:
     before_script:
       - cd ${TRAVIS_BUILD_DIR}/api
     script:
-      - npm run lint
       - npm ci
+      - npm run lint
 
   - env: ECMAScript
     before_script:
       - cd ${TRAVIS_BUILD_DIR}/client
     script:
-      - npm run lint
       - npm ci
+      - npm run lint
       - npm test
 on:
   branch: master

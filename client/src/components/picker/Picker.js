@@ -36,7 +36,7 @@ export default () => {
     return task;
   };
 
-  const handleOptionClick = () => {
+  const handleOptionClick = (e, currentOption) => {
     try {
       setClicked(true);
       if (answer === selectedOption) {
@@ -49,14 +49,14 @@ export default () => {
           }),
         );
       }
-      setSelectedOption(selectedOption);
+      setSelectedOption(currentOption);
 
       setTimeout(() => {
         setSelectedOption('');
         return getTask(answer);
       }, TRANSITION_TIMEOUT);
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
     }
   };
 

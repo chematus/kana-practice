@@ -32,7 +32,7 @@ export default ({ taskObj: { task, answer, abc }, getTask }) => {
 
       <span id="task-message">
         <span id="new-canvas-task">
-          Draw <b>&quot;{task}$quot;</b> in <i>{abc}</i>
+          Draw <b>&quot;{task}&quot;</b> in <i>{abc}</i>
         </span>
       </span>
       <Tooltip
