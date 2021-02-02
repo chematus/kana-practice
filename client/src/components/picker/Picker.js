@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable import/order */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PerformanceDisplay from 'components/utils/PerformanceDisplay';
@@ -13,7 +16,7 @@ import {
 
 const TRANSITION_TIMEOUT = 500;
 
-export default (props) => {
+export default () => {
   const [task, setTask] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [options, setOptions] = useState([]);
@@ -33,7 +36,7 @@ export default (props) => {
     return task;
   };
 
-  const handleOptionClick = (e, selectedOption) => {
+  const handleOptionClick = () => {
     try {
       setClicked(true);
       if (answer === selectedOption) {

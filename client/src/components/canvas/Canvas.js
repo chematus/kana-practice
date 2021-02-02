@@ -1,23 +1,23 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import CanvasControls from './CanvasControls';
 import ReactCanvasDraw from 'react-canvas-draw';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import { getCanvasTask } from 'components/utils/TaskGenerator';
 import lzstring from 'lz-string';
-import CanvasTask from './CanvasTask';
 import HotkeyHandler from 'react-hot-keys';
 import ValidatorDisplay from 'components/utils/ValidatorDisplay';
 import PerformanceDisplay from 'components/utils/PerformanceDisplay';
-
 import {
   canvasTaskCompleted,
   selectCanvasStats,
   exportStats,
   selectIsLoggedIn,
 } from 'components/profile/userSlice';
+import CanvasControls from './CanvasControls';
+import CanvasTask from './CanvasTask';
 
 const apiBaseUrl = process.env.API_URL || 'https://kanapractice-api.tk';
 const apiUrl = `${apiBaseUrl}/ocr`;
@@ -25,7 +25,7 @@ const apiUrl = `${apiBaseUrl}/ocr`;
 const INITIAL_BRUSH_COLOR = '#555555';
 const INITIAL_BRUSH_SIZE = 8;
 
-export default (props) => {
+export default () => {
   const canvasRef = useRef(null);
   const resImageRef = useRef(null);
 
@@ -33,7 +33,7 @@ export default (props) => {
   const [size, setSize] = useState(INITIAL_BRUSH_SIZE);
   const [isPickerActive, setIsPickerActive] = useState(false);
   const [isRangeActive, setIsRangeActive] = useState(false);
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-unused-vars
   const [isCanvasActive, setIsCanvasActive] = useState(true);
   const [isCorrect, setIsCorrect] = useState(null);
   const [taskObj, setTaskObj] = useState({ task: '', answer: '', abc: '' });
@@ -101,7 +101,13 @@ export default (props) => {
     return result;
   };
 
-  const handleChange = (e) => {
+  const getTask = (current) => {
+    const task = getCanvasTask(current);
+    clear();
+    setTaskObj(task);
+  };
+
+  const handleChange = () => {
     setIsPickerActive(false);
     setIsRangeActive(false);
     setIsCorrect(null);
@@ -132,23 +138,18 @@ export default (props) => {
           console.error(e);
         }
       });
-  };
-
-  const getTask = (current) => {
-    const task = getCanvasTask(current);
-    clear();
-    setTaskObj(task);
+    return true;
   };
 
   const onColorChange = (colorObj) => {
     setColor(colorObj.hex);
   };
 
-  const onSizeChange = (e, size) => {
+  const onSizeChange = () => {
     setSize(size);
   };
 
-  const onKeyDown = (keyName, e, handle) => {
+  const onKeyDown = (keyName) => {
     if (!isCanvasActive) {
       return false;
     }
@@ -205,7 +206,7 @@ export default (props) => {
             brushColor={color}
             brushRadius={size}
             catenaryColor={color}
-            hideInterface={true}
+            hideInterface
             ref={canvasRef}
             onChange={handleChange}
           />

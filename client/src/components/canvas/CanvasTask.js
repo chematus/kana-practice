@@ -9,9 +9,7 @@ import CanvasModal from './CanvasModal';
 export default ({ taskObj: { task, answer, abc }, getTask }) => {
   const [isModalActive, setIsModalActive] = useState(false);
 
-  const toggleModal = () => {
-    return setIsModalActive((current) => !current);
-  };
+  const toggleModal = () => setIsModalActive((current) => !current);
 
   const handleTaskChange = () => {
     setIsModalActive(false);
@@ -34,7 +32,7 @@ export default ({ taskObj: { task, answer, abc }, getTask }) => {
 
       <span id="task-message">
         <span id="new-canvas-task">
-          Draw <b>"{task}"</b> in <i>{abc}</i>
+          Draw <b>&quot;{task}$quot;</b> in <i>{abc}</i>
         </span>
       </span>
       <Tooltip

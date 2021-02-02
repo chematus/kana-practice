@@ -68,6 +68,7 @@ userController.get(
         err,
       });
     }
+    return true;
   },
 );
 
@@ -121,6 +122,7 @@ userController.post('/signup', signUpValidation, async (req, res) => {
     });
   }
   try {
+    // eslint-disable-next-line object-curly-newline
     const { username, email, password, stats } = req.body;
     const user = await User.findOne({ email });
     const hashedPassword = await generatePassword(password);

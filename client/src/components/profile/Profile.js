@@ -11,7 +11,7 @@ import Stats from './Stats';
 
 import { selectIsLoggedIn, selectReqStatus } from './userSlice';
 
-export default (props) => {
+export default () => {
   const [tabActive, setTabActive] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
 

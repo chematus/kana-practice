@@ -10,7 +10,7 @@ const PWD_MIN_LENGTH = 8;
 
 const trim = (str) => String(str).replace(/\s/g, '');
 
-export default (props) => {
+export default () => {
   const [isPwdConfirmed, setIsPwdConfirmed] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [username, setUsername] = useState('');
