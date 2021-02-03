@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { render, fireEvent, cleanup } from '@testing-library/react';
 import Canvas from 'components/canvas/Canvas';
-import 'jest-canvas-mock';
 
 const mockStore = configureStore([]);
 const initialState = {

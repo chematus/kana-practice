@@ -34,7 +34,7 @@ export default () => {
   const [isPickerActive, setIsPickerActive] = useState(false);
   const [isRangeActive, setIsRangeActive] = useState(false);
   // eslint-disable-next-line no-unused-vars
-  const [isCanvasActive, setIsCanvasActive] = useState(true);
+  const [isCanvasActive, setIsCanvasActive] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
   const [taskObj, setTaskObj] = useState({ task: '', answer: '', abc: '' });
 
@@ -43,23 +43,11 @@ export default () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const clear = () => {
-    try {
-      canvasRef.current.clear();
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-    return true;
+    return isCanvasActive && canvasRef.current.clear();
   };
 
   const undo = () => {
-    try {
-      canvasRef.current.undo();
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-    return true;
+    return isCanvasActive && canvasRef.current.undo();
   };
 
   const togglePicker = () => {
@@ -173,6 +161,10 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setIsCanvasActive(true);
+  }, [canvasRef]);
+
   return (
     <HotkeyHandler keyName="z, x, c, v" onKeyDown={onKeyDown}>
       <div id="canvas-task">
@@ -201,7 +193,6 @@ export default () => {
           <ReactCanvasDraw
             id="canvas-main"
             hideGrid
-            disabled={!isCanvasActive}
             lazyRadius={1}
             brushColor={color}
             brushRadius={size}
