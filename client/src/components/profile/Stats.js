@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
@@ -24,7 +25,7 @@ const getWeakspotList = (stats, limit = 5) => {
   return result;
 };
 
-export default (props) => {
+export default () => {
   const [tabActive, setTabActive] = useState(0);
 
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ export default (props) => {
     setTabActive(val);
   };
 
-  const handleLogout = (e) => {
+  const handleLogout = () => {
     dispatch(userLoggedOut());
   };
 

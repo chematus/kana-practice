@@ -26,10 +26,10 @@ const logger = createLogger({
   ],
 });
 
-const prepareWorker = async (logger) => {
+const prepareWorker = async (lgr) => {
   const worker = createWorker({
     langPath: './src/store/ocr_data/',
-    logger,
+    lgr,
   });
   await worker.load();
   await worker.loadLanguage('jpn');
@@ -52,7 +52,7 @@ const parseImg = async (img, worker) => {
 
 const ocrController = express.Router();
 prepareWorker(logger.info).then((worker) => {
-  return ocrController.post('/', async (req, res) => {
+  ocrController.post('/', async (req, res) => {
     const {
       body: { img: lzImg },
     } = req;

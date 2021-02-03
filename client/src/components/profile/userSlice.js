@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -55,20 +57,22 @@ export const autoSignIn = createAsyncThunk(
 
 export const signUp = createAsyncThunk(
   'user/signUp',
-  async (userData, { rejectWithValue }) =>
-    axios
+  async (userData, { rejectWithValue }) => {
+    return axios
       .post(apiEndpoints.signUp, userData)
       .then((res) => res.data)
-      .catch((e) => rejectWithValue(e.response.data)),
+      .catch((e) => rejectWithValue(e.response.data));
+  },
 );
 
 export const signIn = createAsyncThunk(
   'user/signIn',
-  async (userData, { rejectWithValue }) =>
-    axios
+  async (userData, { rejectWithValue }) => {
+    return axios
       .post(apiEndpoints.signIn, userData)
       .then((res) => res.data)
-      .catch((e) => rejectWithValue(e.response.data)),
+      .catch((e) => rejectWithValue(e.response.data));
+  },
 );
 
 export const exportStats = createAsyncThunk(
@@ -92,9 +96,11 @@ const userSlice = createSlice({
       const { isCorrect, kana } = action.payload;
       const list = { ...state.stats.weakspot };
       if (isCorrect) {
+        // eslint-disable-next-line no-param-reassign
         state.stats.picker.correct++;
       } else {
-        list[kana] ? list[kana]++ : (list[kana] = 1);
+        if (list[kana]) list[kana]++;
+        list[kana] = 1;
         state.stats.weakspot = list;
       }
       state.stats.picker.total++;
@@ -105,15 +111,16 @@ const userSlice = createSlice({
       if (isCorrect) {
         state.stats.matcher.correct++;
       } else {
-        list[kana] ? list[kana]++ : (list[kana] = 1);
+        if (list[kana]) list[kana]++;
+        list[kana] = 1;
         state.stats.weakspot = list;
       }
       state.stats.matcher.total++;
     },
-    canvasTaskCompleted(state, action) {
+    canvasTaskCompleted(state) {
       state.stats.canvas.total++;
     },
-    userLoggedOut(state, action) {
+    userLoggedOut(state) {
       localStorage.clear();
       state.username = '';
       state.email = '';
@@ -131,13 +138,13 @@ const userSlice = createSlice({
       };
       state.stats.weakspot = {};
     },
-    flushError(state, action) {
+    flushError(state) {
       state.error = null;
       state.status = 'idle';
     },
   },
   extraReducers: {
-    [signUp.pending]: (state, action) => {
+    [signUp.pending]: (state) => {
       state.status = 'processing';
     },
     [signUp.fulfilled]: (state, action) => {
@@ -153,7 +160,7 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action.payload?.errMsg || DEFAULT_ERROR_MESSAGE;
     },
-    [signIn.pending]: (state, action) => {
+    [signIn.pending]: (state) => {
       state.status = 'processing';
     },
     [signIn.fulfilled]: (state, action) => {
@@ -192,7 +199,7 @@ const userSlice = createSlice({
       state.status = 'failed';
       state.error = action?.error || DEFAULT_ERROR_MESSAGE;
     },
-    [autoSignIn.pending]: (state, action) => {
+    [autoSignIn.pending]: (state) => {
       state.status = 'processing';
     },
     [autoSignIn.fulfilled]: (state, action) => {
@@ -204,7 +211,7 @@ const userSlice = createSlice({
       state.isLoggedIn = true;
       state.stats = stats;
     },
-    [autoSignIn.rejected]: (state, action) => {
+    [autoSignIn.rejected]: (state) => {
       state.status = 'failed';
     },
   },

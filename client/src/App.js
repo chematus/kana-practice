@@ -24,7 +24,7 @@ const ErrorPage = React.lazy(() => import('components/ErrorPage'));
 const PRIMARY_THEME_COLOR = '#5e5e5e';
 const SECONDARY_THEME_COLOR = '#999';
 
-export default (props) => {
+export default () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(autoSignIn());

@@ -1,18 +1,30 @@
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable operator-linebreak */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMatcherTask, getKana } from 'components/utils/TaskGenerator';
-import MatcherOption from './MatcherOption';
 import ValidatorDisplay from 'components/utils/ValidatorDisplay';
 import PerformanceDisplay from 'components/utils/PerformanceDisplay';
-
 import {
   matcherTaskCompleted,
   selectMatcherStats,
   exportStats,
   selectIsLoggedIn,
 } from 'components/profile/userSlice';
+import MatcherOption from './MatcherOption';
 
-export default (props) => {
+const shuffleArray = (arr) => {
+  return [...arr].sort(() => Math.random() - 0.5);
+};
+
+const splitTask = (arr) => {
+  return shuffleArray([
+    shuffleArray(arr.map((item) => item[0])),
+    shuffleArray(arr.map((item) => item[1])),
+  ]);
+};
+
+export default () => {
   const [task, setTask] = useState([]);
   const [leftOption, setLeftOption] = useState({ list: [], id: 0, char: '' });
   const [rightOption, setRightOption] = useState({ list: [], id: 0, char: '' });
@@ -29,17 +41,6 @@ export default (props) => {
     const [leftList, rightList] = splitTask(taskList);
     setLeftOption((current) => ({ ...current, list: leftList }));
     setRightOption((current) => ({ ...current, list: rightList }));
-  };
-
-  const shuffleArray = (arr) => {
-    return [...arr].sort(() => Math.random() - 0.5);
-  };
-
-  const splitTask = (arr) => {
-    return shuffleArray([
-      shuffleArray(arr.map((item) => item[0])),
-      shuffleArray(arr.map((item) => item[1])),
-    ]);
   };
 
   const checkMatch = () => {
@@ -79,7 +80,7 @@ export default (props) => {
   };
 
   const handleClick = (column, char, e) => {
-    const id = e.currentTarget.id;
+    const { id } = e.currentTarget;
 
     if (column === 'left') {
       setLeftOption((current) => ({ ...current, char, id }));
@@ -116,14 +117,14 @@ export default (props) => {
       <div id="matcher-options-wrapper">
         <div id="matcher-options-left">
           {leftOption.list.map((item, key) => {
-            const id = key + '_1';
+            const id = `${key}_1`;
             const stateId = leftOption.id;
             return (
               <MatcherOption
                 key={id}
                 id={id}
                 disabled={disabledList.includes(id)}
-                active={id === stateId ? true : false}
+                active={id === stateId}
                 handleClick={handleClick}
                 column="left"
                 char={item}
@@ -134,14 +135,14 @@ export default (props) => {
         <ValidatorDisplay correct={isCorrect} />
         <div id="matcher-options-right">
           {rightOption.list.map((item, key) => {
-            const id = key + '_2';
+            const id = `${key}_2`;
             const stateId = rightOption.id;
             return (
               <MatcherOption
                 key={id}
                 id={id}
                 disabled={disabledList.includes(id)}
-                active={id === stateId ? true : false}
+                active={id === stateId}
                 handleClick={handleClick}
                 column="right"
                 char={item}

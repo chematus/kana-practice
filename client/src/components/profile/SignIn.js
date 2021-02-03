@@ -7,7 +7,7 @@ import { signIn } from './userSlice';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
 
-export default (props) => {
+export default () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isVerified, setIsVerified] = useState(false);

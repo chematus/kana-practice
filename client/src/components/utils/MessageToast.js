@@ -10,14 +10,14 @@ import {
 
 const TOAST_DURATION = 3000;
 
-export default (props) => {
+export default () => {
   const [isActive, setIsActive] = useState(false);
 
   const dispatch = useDispatch();
   const status = useSelector(selectReqStatus);
   const error = useSelector(selectReqError);
 
-  const handleClose = (e) => {
+  const handleClose = () => {
     setIsActive(false);
     dispatch(flushError());
   };

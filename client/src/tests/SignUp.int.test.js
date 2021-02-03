@@ -1,3 +1,7 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable one-var */
+/* eslint-disable one-var-declaration-per-line */
+/* eslint-disable no-undef */
 import React from 'react';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import kana from './_kana';
 
 export const getCanvasTask = (current) => {
@@ -7,7 +8,7 @@ export const getCanvasTask = (current) => {
     (char) => char[1] !== current && kana.ocr_whitelist.indexOf(char[1]) >= 0,
   );
   const lit = charList[Math.floor(Math.random() * charList.length)];
-  const result = { task: lit[0], abc: abc, answer: lit[1] };
+  const result = { task: lit[0], abc, answer: lit[1] };
 
   if (process.env.NODE_ENV === 'development') {
     console.log(result);
@@ -23,7 +24,7 @@ export const getPickerTask = (current, optionsAmount = 5) => {
     (char) => char[1] !== current && char[0] !== current,
   );
   const task = charList[Math.floor(Math.random() * charList.length)];
-  let options = [];
+  const options = [];
   do {
     const option = charList[Math.floor(Math.random() * charList.length)];
     if (!options.includes(option) && option !== task) {
@@ -48,7 +49,7 @@ export const getMatcherTask = (pairsAmount = 5) => {
   const keys = Object.keys(kana);
   const abc = keys[Math.round(Math.random())];
   let result = [];
-  let list = [...kana[abc]];
+  const list = [...kana[abc]];
   do {
     const pair = list.splice(Math.floor(Math.random() * list.length), 1);
     result = [...result, ...pair];
